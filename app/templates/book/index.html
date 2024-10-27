@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h2>{% block title %}List{% endblock title %}</h2>
+{% endblock header %}
+
+{% block content %}
+  {% for book in books %}
+    <article>
+      <p class="message">{{ book["message"] }}<p>
+      <aside> {{ book["title_book"] }}  </aside>
+    </article>
+  {% endfor %}
+{% endblock content %}
