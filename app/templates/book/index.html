@@ -7,8 +7,8 @@
 {% block content %}
   {% for book in books %}
     <article>
-      <p class="message">{{ book["message"] }}<p>
-      <aside> {{ book["title_book"] }}  </aside>
+      <p class="message">{{ book.title }}<p>
+      <aside> {{ book.author }}  </aside>
     </article>
   {% endfor %}
 {% endblock content %}
