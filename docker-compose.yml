@@ -1,0 +1,21 @@
+services:
+  web:
+    build: .
+    command: python manage.py run -h 0.0.0.0
+    volumes:
+      - ./:/home/library/
+    ports:
+      - 5001:5001
+    env_file:
+      - ./.env.dev
+  db:
+    image: postgres:14
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=library-db
+      - POSTGRES_USER=library-user
+      - POSTGRES_PASSWORD=ganyu
+
+volumes:
+  postgres_data:
