@@ -6,6 +6,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 RUN apt-get -q -y update \
+    && apt-get install -y netcat-openbsd \
     && apt-get clean
 
 RUN pip install --upgrade pip
