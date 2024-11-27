@@ -12,22 +12,6 @@
 
 *Library* est une application conteneuriser avec **Docker** et elle utilise l'API **Open Library**
 
-## Road Map
-
-| Nom | Statut      | Version |
-| --- | ----------- | --------|
-| Gestion des Livres | In Progress | 0.1.0 |
-| Page Auteur | Not Started | 0.1.0 |
-| Page Editeur | Not Started | 0.1.0 |
-| Page Saga | Not Started | 0.1.0 |
-| Page Liste | Not Started | 0.2.0 |
-| Page PAL | Not Started | 0.2.0 |
-| Page Wishlist | Not Started | 0.2.0 |
-| Avis | Not Started | 1.0.0 |
-| Citations | Not Started | 1.0.0 |
-| Relecture | Not Started | 1.0.0 |
-| Page Statistique | Not Started | 1.0.0 |
-
 ## How to use ?
 
 ### Pré-requis
