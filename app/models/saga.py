@@ -12,8 +12,8 @@ class Saga(db.Model):
     books = db.relationship('Book', back_populates='saga')
 
     def __repr__(self):
-        return f'<Saga "{self.idSaga}" "{self.nameSaga}" in "{self.numberOfVolumes}" volumes >'
+        return f'<Saga "{self.id}" "{self.saga}" in "{self.number_of_volumes}" volumes >'
 
     def __init__(self, name, volumes):
-        self.nameSaga = name
-        self.numberOfVolumes = volumes
+        self.name = name
+        self.number_of_volumes = volumes

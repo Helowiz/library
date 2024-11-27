@@ -7,7 +7,7 @@ from app.models.edition import Edition
 class Book(db.Model):
     __tablename__ = 'books'
 
-    isbn = db.Column('ISBN', db.Integer, primary_key=True)
+    isbn = db.Column('ISBN', db.BigInteger, primary_key=True)
     title = db.Column('Title', db.String(255), nullable=False, unique=True)
     pages = db.Column('Pages', db.Integer, nullable=False)
     summary = db.Column('Summery', db.Text, nullable=False)
@@ -21,8 +21,9 @@ class Book(db.Model):
     def __repr__(self):
         return f'<Book n°"{self.isbn}" "{self.title}">'
 
-    def __init__(self, title, author, pages, summery):
+    def __init__(self, isbn, title, pages, summary, id_saga=None):
+        self.isbn = isbn
         self.title = title
-        self.author = author
         self.pages = pages
-        self.summery = summery
+        self.summary = summary
+        self.saga_id = id_saga
