@@ -14,6 +14,7 @@ COPY requirements.txt /home/library/requirements.txt
 RUN pip install -r requirements.txt
 
 COPY . /home/library/
+COPY entrypoint.sh /home/library/entrypoint.sh
 RUN chmod +x /home/library/entrypoint.sh
 
 ENTRYPOINT ["/home/library/entrypoint.sh"]    
