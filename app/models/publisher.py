@@ -1,9 +1,4 @@
 from app.extensions import db
-import enum
-
-class Langage(enum.Enum):
-    FR = "Français"
-    EN = "Anglais"
 
 class Publisher(db.Model):
     __tablename__ = 'publisher'
@@ -16,7 +11,8 @@ class Publisher(db.Model):
     editions = db.relationship('Edition', back_populates='publisher')
 
     def __repr__(self):
-        return f'<Author "{self.idAuthor}" "{self.nameAuthor}" >'
+        return f'<Publisher n° "{self.id}" "{self.name}" >'
 
-    def __init__(self, name):
-        self.nameAuthor = name
+    def __init__(self, name, language):
+        self.name = name
+        self.language = language
