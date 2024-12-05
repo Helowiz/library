@@ -1,10 +1,10 @@
-<nav>
-    <ul>
-      <li><a href="{{ url_for('main.index') }}">Home</a></li>
-      <li><a href="{{ url_for('book.index') }}">List</a></li>
-      <li><a href="{{ url_for('book.add') }}">Add</a></li>
-      <li><a href="{{ url_for('book.delete') }}">Delete</a></li>
-      <li><a href="{{ url_for('book.update') }}">Update</a></li>
-    </ul>
-  </nav>
+<nav class=".fixed-content">
+  <div class="left-box nav-left-title">
+    <img id="iconBook" src="{{ url_for('static', filename='assets/Book.png') }}" alt="a Book icone"> 
+    <a class="first-title" href="{{ url_for('main.index') }}">Library</a>
+  </div>
+  <ul>
+    <li class="nav-title"><a href="{{ url_for('book.index') }}">Ma bibliothèque</a></li>
+  </ul>
+</nav>
   
