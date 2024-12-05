@@ -1,7 +1,7 @@
 import os
 from flask import Flask, request
 from app.config import Config
-from app.extensions import db
+from app.extensions import db, migrate
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -10,7 +10,8 @@ def create_app(config_class=Config):
     print(f"Current Environment: {os.getenv('ENVIRONMENT')}")
 
     # Initialize Flask extensions here
-    db.init_app(app)
+    db.init_app(app) 
+    migrate.init_app(app, db)
 
     # Register blueprints here
     from app.main import bp as main_bp

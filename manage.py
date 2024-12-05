@@ -24,9 +24,7 @@ def create_db():
     print(f"Tables created: {tables}")
 
 @cli.command("seed_db")
-
 def seed_db():
-
     new_saga = Saga(name="Harry Potter", volumes=7)
     new_book = Book(
         isbn=9780747532743,
