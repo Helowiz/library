@@ -14,9 +14,8 @@ def index():
 def add():
     if request.method == "POST":
         title = request.form["title"]
-        author = request.form["author"]
 
-        book = Book(title=title, author=author)
+        book = Book(title=title)
 
         db.session.add(book)
         db.session.commit()
