@@ -10,17 +10,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@300;400;500;600;700;800;900&family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 </head>
 <body>
-{% include("_navigation.html") %}
-  <div id="all-windows">
-    {% include("_log.html") %}
-    <section>
-      <header>
-        {% block header %}{% endblock header %}
-      </header>
-      <main>
-        {% block content %}<p>No messages.</p>{% endblock content %}
-      </main>
-    </section>
-  </div>
+  <section>
+    <header>
+      {% block header %}{% endblock header %}
+    </header>
+    {% include("_navigation.html") %}
+    <main>
+      {% block content %}<p>No messages.</p>{% endblock content %}
+    </main>
+  </section>
 </body>
 </html>

@@ -1,90 +1,43 @@
 * {
   box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
   margin: 0 auto;
 }
 
-.fixed-content {
-  top: 0;
-  bottom:0;
-  position:fixed;
-  overflow-y:scroll;
-  overflow-x:hidden;
+header h2 {
+  text-align: center;
 }
 
-/* Nav Bar */
-nav {
-  display: flex;
-  outline: 2px solid #000;
-}
-
-.left-box{
-  width: 20em;
-}
-
-.nav-left-title{
-  display: flex;
-}
-
-.nav-left-title img{
-  margin: 1em;
-}
-
-a,
-a:visited {
-  color: #000;
-  text-decoration: none;
-}
-
-a:hover {
-  color: #000;
-  text-decoration: none;
-}
-
-nav ul {
-  list-style-type: none;
-  padding: 0;
+/* Navbar */
+ul {
   display: flex;
   justify-content: center;
-  align-items: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
 }
 
-/* Title */
-
-.first-title {
-color: #000;
-font-family: "Inknut Antiqua", sans-serif;
-font-size: 32px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
-text-decoration: none;
+li {
+  float: left;
 }
 
-.nav-title {
-color: #000;
-font-family: "Inria Sans", sans-serif;
-font-size: 24px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
-text-decoration: none;
+li a {
+  display: block;
+  color: white;
+  padding : 14px 16px;
+  text-align: center;
+  text-decoration: none;
 }
 
-/* console */
-#console{
-  height: 100vh;
-  background-color: #000;
-  color:#FFF;
-  font-family: "Roboto mono", sans-serif;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-}
-
-#all-windows{
-  display: flex;
+/* Change the link color to #111 (black) on hover */
+li a:hover {
+  background-color: #941de4;
 }
