@@ -1,7 +1,6 @@
 import os
-from flask import Flask, request
+from flask import Flask
 from app.config import Config
-from app.extensions import db, migrate
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -10,16 +9,12 @@ def create_app(config_class=Config):
     print(f"Current Environment: {os.getenv('ENVIRONMENT')}")
 
     # Initialize Flask extensions here
-    db.init_app(app) 
-    migrate.init_app(app, db)
 
     # Register blueprints here
     from app.main import bp as main_bp
-
     app.register_blueprint(main_bp)
 
     from app.book import bp as book_bp
-
     app.register_blueprint(book_bp, url_prefix="/book")
 
     @app.route("/routes")

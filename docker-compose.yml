@@ -1,19 +1,24 @@
 services:
-  web:
+  app:
     build: .
-    command: python manage.py run -h 0.0.0.0 
+    ports: 
+      - 5000:5000
     volumes:
-      - ./app/:/home/library/app
-    ports:
-      - 5001:5001
-    env_file:
-      - ./.env.dev
+      - .:/app
+    environment:
+      FLASK_DEBUG: 1
+    command: flask run -h 0.0.0.0
   db:
-    image: postgres:14
+    image: postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: library-db
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    env_file:
-      - ./.env.dev
-
+      - db_data:/var/lib/postgres/data
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
 volumes:
-  postgres_data:
+  db_data:

@@ -1,24 +1,15 @@
 from flask import render_template, request, url_for, redirect
 from app.book import bp
-from app.extensions import db
-from app.models.book import Book
 
 
 @bp.route("/")
 def index():
-    books = Book.query.all()
-    return render_template("book/index.html", books=books)
+    return render_template("book/index.html")
 
 
 @bp.route("/add/", methods=("GET", "POST"))
 def add():
     if request.method == "POST":
-        title = request.form["title"]
-
-        book = Book(title=title)
-
-        db.session.add(book)
-        db.session.commit()
 
         return redirect(url_for("book.index"))
 
