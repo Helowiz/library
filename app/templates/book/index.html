@@ -7,7 +7,7 @@
 {% block content %}
   {% for book in books %}
     <article>
-      <h1 class="message">{{ book.title }} de {{ book.authors }}<h1>
+      <h1 class="message">{{ book[0] }}<h1>
     </article>
   {% endfor %}
 {% endblock content %}
