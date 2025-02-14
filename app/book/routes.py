@@ -1,10 +1,12 @@
 from flask import render_template, request, url_for, redirect
 from app.book import bp
-
+from app.models.db.select import select_all_from_table
 
 @bp.route("/")
 def index():
-    return render_template("book/index.html")
+    books = select_all_from_table("Books")
+    print(books)
+    return render_template("book/index.html", books=books)
 
 
 @bp.route("/add/", methods=("GET", "POST"))

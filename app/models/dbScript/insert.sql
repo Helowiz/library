@@ -1,0 +1,1 @@
+INSERT INTO Authors (NameAuthor) VALUES ('Freida McFraden');
