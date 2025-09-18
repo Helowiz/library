@@ -1,0 +1,10 @@
+stages:
+  - build
+
+build-image:
+  stage: build
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
+  script:
+    - docker build -t mon-app-bibliotheque .

@@ -12,9 +12,7 @@ def index():
 @bp.route("/add/", methods=("GET", "POST"))
 def add():
     if request.method == "POST":
-
         return redirect(url_for("book.index"))
-
     return render_template("book/add.html")
 
 
