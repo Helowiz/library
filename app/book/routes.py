@@ -1,6 +1,8 @@
-from flask import render_template, request, url_for, redirect
+from flask import redirect, render_template, request, url_for
+
 from app.book import bp
 from app.models.db.select import select_all_from_table
+
 
 @bp.route("/")
 def index():
