@@ -1,0 +1,24 @@
+name: Build and Scan Library
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: docker build -t library:latest .
+
+      - name: Save Docker image
+        run: docker save -o image.tar library:latest
+      - uses: actions/upload-artifact@v2
+        with:
+          name: docker-image
+          path: image.tar
