@@ -1,5 +1,7 @@
-import app.models.db.connection as db 
 import psycopg2
+
+import app.models.db.connection as db
+
 
 def select_all_from_table(table):
     query = "SELECT * FROM " + table + ";"
@@ -11,6 +13,6 @@ def select_all_from_table(table):
         conn.commit()
     except psycopg2.ProgrammingError as e:
         conn.rollback()
-        print ("Message systeme : ", e)
+        print("Message systeme : ", e)
     cur.close()
     return result

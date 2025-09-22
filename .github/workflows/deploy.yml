@@ -1,0 +1,21 @@
+name: Deploy to Local PC
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy-app:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build and Deploy App with Docker Compose
+        run: |
+          docker-compose up -d --build
+
+      - name: Clean up old docker images
+        run: |
+          docker image prune -f
