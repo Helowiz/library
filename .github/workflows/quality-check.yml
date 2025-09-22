@@ -7,7 +7,6 @@ on:
     branches: [ main ]
 
 jobs:
-  # ---- TÂCHE 1: Vérification avec Ruff (Lint & Format) ----
   ruff-check:
     name: Ruff Linter and Formatter Check
     runs-on: ubuntu-latest
@@ -29,7 +28,6 @@ jobs:
       - name: Lint with Ruff
         run: ruff check .
 
-  # ---- TÂCHE 2: Exécution des tests unitaires ----
   unit-tests:
     name: Unit Tests
     runs-on: ubuntu-latest
@@ -52,7 +50,6 @@ jobs:
       - name: Run tests with coverage
         run: pytest --cov=app --cov-report=xml
 
-  # ---- TÂCHE 3: Scans de sécurité ----
   security-scans:
     name: Security Scans
     runs-on: ubuntu-latest
