@@ -1,7 +1,8 @@
 services:
   app:
+    container_name: library-app
     build: .
-    ports: 
+    ports:
       - 5000:5000
     volumes:
       - .:/app
@@ -9,7 +10,10 @@ services:
       FLASK_DEBUG: 1
     command: flask run -h 0.0.0.0
   db:
+    container_name: library-db
     image: postgres
+    ports:
+      - 5432:5432
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: secret

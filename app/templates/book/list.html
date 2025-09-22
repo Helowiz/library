@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Livres</title>
+</head>
+<body>
+    <h1>Ma Bibliothèque</h1>
+    <ul>
+        {% for book in books %}
+            <li>{{ book.title }} - par {{ book.author }} (Publié le: {{ book.published_date.strftime('%Y-%m-%d') }})</li>
+        {% else %}
+            <li>Aucun livre dans la bibliothèque.</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('book.add_book') }}">Ajouter un nouveau livre</a>
+</body>
+</html>
