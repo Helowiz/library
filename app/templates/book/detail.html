@@ -1,0 +1,95 @@
+<!-- Fichier: app/templates/book/book_detail.html -->
+
+{% extends "layout.html" %}
+
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block content %}
+<main>
+    <article class="book-detail-layout">
+        <aside class="book-cover-column">
+            <div class="book-detail-cover">
+                {% if book.cover_url %}
+                <img src="{{ book.cover_url }}" alt="Couverture de {{ book.title }}">
+                {% endif %}
+            </div>
+            <div class="book-personal-stats">
+                <!-- NOTE SOUS FORME D'ÉTOILES -->
+                {% if book.rating %}
+                <div class="rating-display">
+                    <div class="stars-outer">
+                        <div class="stars-inner" style="width: {{ (book.rating / 5) * 100 }}%;"></div>
+                    </div>
+                    <span class="rating-value">{{ book.rating }}/5</span>
+                </div>
+                {% endif %}
+
+                <!-- STATUTS (LU / FAVORI) -->
+                <div class="status-tags">
+                    {% if book.is_read %}
+                    <span class="tag read-tag">✓ Lu</span>
+                    {% endif %}
+                    {% if book.is_favorite %}
+                    <span class="tag favorite-tag">★ Coup de cœur</span>
+                    {% endif %}
+                </div>
+            </div>
+        </aside>
+
+        <section class="book-info-column">
+            <header class="book-header">
+                <h1 class="book-title">{{ book.title }}</h1>
+                <h2 class="book-author">par {{ book.author }}</h2>
+            </header>
+
+            <div class="book-actions">
+                <a href="#" class="button-primary">En Cours</a>
+                <a href="#" class="button-secondary">Pile à Lire</a>
+                <a href="#" class="button-secondary">WishList</a>
+            </div>
+
+
+            {% if book.review %}
+            <section class="user-review">
+                <h3>Votre Avis</h3>
+                <div class="review-display">
+                    <p>{{ book.review }}</p>
+                </div>
+            </section>
+            {% endif %}
+
+            <div class="book-synopsis">
+                <h3>Résumé</h3>
+                <p>{{ book.synopsis }}</p>
+            </div>
+
+            <div class="book-metadata">
+                <h3>Détails</h3>
+                <dl>
+                    <div class="meta-item">
+                        <dt class="meta-label">ISBN</dt>
+                        <dd class="meta-value">{{ book.isbn }}</dd>
+                    </div>
+                    <div class="meta-item">
+                        <dt class="meta-label">Date de publication</dt>
+                        <dd class="meta-value">{{ book.published_date.strftime('%d %B %Y') if book.published_date else
+                            'N/A' }}</dd>
+                    </div>
+                    <div class="meta-item">
+                        <dt class="meta-label">Nombre de pages</dt>
+                        <dd class="meta-value">{{ book.pages or 'N/A' }}</dd>
+                    </div>
+                    <div class="meta-item">
+                        <dt class="meta-label">Genre</dt>
+                        <dd class="meta-value">{{ book.genre }}</dd>
+                    </div>
+                    <div class="meta-item">
+                        <dt class="meta-label">Langue</dt>
+                        <dd class="meta-value">{{ book.language }}</dd>
+                    </div>
+                </dl>
+            </div>
+        </section>
+    </article>
+</main>
+{% endblock %}
