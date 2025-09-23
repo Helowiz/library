@@ -2,7 +2,9 @@ import os
 
 from flask import Flask
 
-from app.config import Config
+from .config import Config
+from .extensions import db, migrate
+from .models import Book
 
 
 def create_app(config_class=Config):
@@ -12,22 +14,17 @@ def create_app(config_class=Config):
     print(f"Current Environment: {os.getenv('ENVIRONMENT')}")
 
     # Initialize Flask extensions here
+    db.init_app(app)
+    migrate.init_app(app, db)
 
     # Register blueprints here
-    from app.main import bp as main_bp
+    from .main import bp as main_bp
 
     app.register_blueprint(main_bp)
 
-    from app.book import bp as book_bp
+    from .book import bp as book_bp
 
-    app.register_blueprint(book_bp, url_prefix="/book")
-
-    @app.route("/routes")
-    def list_routes():
-        routes = []
-        for rule in app.url_map.iter_rules():
-            routes.append(f"{rule.endpoint}: {rule}")
-        return "<br>".join(routes)
+    app.register_blueprint(book_bp, url_prefix="/books")
 
     return app
 

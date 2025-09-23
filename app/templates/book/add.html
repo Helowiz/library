@@ -1,21 +1,36 @@
-{% extends 'base.html' %}
+<!-- Fichier: app/templates/book/add.html -->
 
-{% block header %}
-  <h2>{% block title %}Add{% endblock title %}</h2>
-{% endblock header %}
+{% extends "layout.html" %}
+
+{% block title %}Ajouter un Livre{% endblock %}
 
 {% block content %}
-  <form method="post">
-    <div class="form-group">
-        <label for="title">Title</label>
-        <input type="text" name="title" id="title" class="form-control">{{ request.form['title'] }}</textarea>
+<main>
+    <div class="form-container">
+        <h2 class="form-title">Ajouter un Nouveau Livre</h2>
+        <p class="form-subtitle">Remplissez les informations ci-dessous pour ajouter un livre à votre collection.</p>
+
+        <form action="" method="post">
+            <div class="form-group">
+                <label for="title">Titre du livre</label>
+                <input type="text" id="title" name="title" required autocomplete="off">
+            </div>
+
+            <div class="form-group">
+                <label for="author">Auteur</label>
+                <input type="text" id="author" name="author" required autocomplete="off">
+            </div>
+
+            <div class="form-group">
+                <label for="cover_url">URL de la couverture (optionnel)</label>
+                <input type="url" id="cover_url" name="cover_url">
+            </div>
+
+
+            <div class="form-actions">
+                <button type="submit" class="button-primary">Enregistrer le livre</button>
+            </div>
+        </form>
     </div>
-    <div class="form-group">
-        <label for="author">Author</label>
-        <input type="text" name="author" id="author" value="{{ request.form['author'] }}" class="form-control">
-    </div>
-    <div class="form-group">
-        <input type="submit" value="Add Book" class="submit-btn">
-    </div>
-</form>
-{% endblock content %}
+</main>
+{% endblock %}

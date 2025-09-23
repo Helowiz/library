@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}Ma Collection{% endblock %}
+
+{% block content %}
+<main>
+    <div class="book-grid">
+        {% for book in books %}
+        <div class="book-card">
+            <div class="book-cover">
+                {% if book.cover_url %}
+                <img src="{{ book.cover_url }}" alt="Couverture de {{ book.title }}">
+                {% endif %}
+            </div>
+            <h3>{{ book.title }}</h3>
+            <p>{{ book.author }}</p>
+        </div>
+        {% else %}
+        <p>Aucun livre dans votre bibliothèque pour le moment.</p>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}
