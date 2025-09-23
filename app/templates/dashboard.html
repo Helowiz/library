@@ -1,0 +1,131 @@
+{% extends "layout.html" %}
+
+{% block title %}Tableau de bord{% endblock %}
+
+{% block content %}
+<main>
+    <div class="dashboard-grid">
+        <!-- WIDGET 1 : EN COURS -->
+        <section class="widget currently-reading">
+            <div class="widget-header">
+                <h2>En Cours</h2>
+            </div>
+            <div class="widget-content">
+                <div class="book-cover large"></div>
+                <div class="book-details">
+                    <h3>Dune</h3>
+                    <p>Frank Herbert</p>
+                    <div class="progress-bar">
+                        <div class="progress-bar-inner" style="width: 75%;"></div>
+                    </div>
+                    <span class="progress-text">75% - Page 352 / 468</span>
+                    <div class="book-actions">
+                        <a href="#">Sauvgarder</a>
+                        <a href="#">Terminer</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- WIDGET 2 : STATISTIQUES -->
+        <section class="widget stats-widget">
+            <div class="widget-header">
+                <h2>Statistiques 2024</h2>
+            </div>
+            <div class="widget-content">
+                <div class="stat-item">
+                    <span class="stat-value">12</span>
+                    <span class="stat-label">Livres Lus</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">4,812</span>
+                    <span class="stat-label">Pages Lues</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">401</span>
+                    <span class="stat-label">Pages / Mois</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- WIDGET 3 : PROCHAINES LECTURES -->
+        <section class="widget to-read-widget">
+            <div class="widget-header">
+                <h2>Prochaines Lectures</h2>
+                <a href="#" class="widget-link">Voir tout</a>
+            </div>
+            <div class="widget-content">
+                <ul class="book-list">
+                    <li>
+                        <span class="book-title">Fondation</span>
+                        <span class="book-author">Isaac Asimov</span>
+                    </li>
+                    <li>
+                        <span class="book-title">Hyperion</span>
+                        <span class="book-author">Dan Simmons</span>
+                    </li>
+                    <li>
+                        <span class="book-title">Le Problème à Trois Corps</span>
+                        <span class="book-author">Cixin Liu</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- WIDGET 4 : OBJECTIF DE LECTURE -->
+        <section class="widget goal-widget">
+            <div class="widget-header">
+                <h2>Objectif 2024</h2>
+            </div>
+            <div class="widget-content">
+                <div class="goal-chart">
+                    <div class="goal-text">
+                        <span class="goal-value">15</span>
+                        <span class="goal-label">/ 25 livres</span>
+                    </div>
+                    <svg viewBox="0 0 120 120">
+                        <circle class="background-circle" cx="60" cy="60" r="50"></circle>
+                        <circle class="progress-circle" cx="60" cy="60" r="50"></circle>
+                    </svg>
+                </div>
+                <div class="goal-summary">
+                    <p>Vous êtes à <strong>60%</strong> de votre objectif !</p>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Plus que 10 livres pour y arriver.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- WIDGET 5 : ACTIVITÉ RÉCENTE -->
+        <section class="widget activity-feed">
+            <div class="widget-header">
+                <h2>Activité Récente</h2>
+            </div>
+            <div class="widget-content">
+                <ul>
+                    <li>
+                        <div class="activity-icon">✓</div>
+                        <div>
+                            <div class="activity-text">Vous avez terminé <strong>1984</strong>.</div>
+                            <div class="activity-time">il y a 2 jours</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="activity-icon">+</div>
+                        <div>
+                            <div class="activity-text">Vous avez ajouté <strong>Le Problème à Trois Corps</strong> à
+                                votre pile à lire.</div>
+                            <div class="activity-time">il y a 4 jours</div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="activity-icon">📖</div>
+                        <div>
+                            <div class="activity-text">Vous avez commencé à lire <strong>Dune</strong>.</div>
+                            <div class="activity-time">la semaine dernière</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+</main>
+{% endblock %}

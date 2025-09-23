@@ -18,8 +18,9 @@ def add_book():
     if request.method == "POST":
         title = request.form["title"]
         author = request.form["author"]
+        cover = request.form["cover_url"]
 
-        new_book = Book(title=title, author=author)
+        new_book = Book(title=title, author=author, cover_url=cover)
 
         db.session.add(new_book)
         db.session.commit()

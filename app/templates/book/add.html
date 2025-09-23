@@ -1,21 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Ajouter un Livre</title>
-</head>
-<body>
-    <h1>Ajouter un nouveau livre</h1>
-    <form method="post">
-        <div>
-            <label for="title">Titre :</label>
-            <input type="text" id="title" name="title" required>
-        </div>
-        <div>
-            <label for="author">Auteur :</label>
-            <input type="text" id="author" name="author" required>
-        </div>
-        <button type="submit">Ajouter</button>
-    </form>
-</body>
-</html>
+<!-- Fichier: app/templates/book/add.html -->
+
+{% extends "layout.html" %}
+
+{% block title %}Ajouter un Livre{% endblock %}
+
+{% block content %}
+<main>
+    <div class="form-container">
+        <h2 class="form-title">Ajouter un Nouveau Livre</h2>
+        <p class="form-subtitle">Remplissez les informations ci-dessous pour ajouter un livre à votre collection.</p>
+
+        <form action="" method="post">
+            <div class="form-group">
+                <label for="title">Titre du livre</label>
+                <input type="text" id="title" name="title" required autocomplete="off">
+            </div>
+
+            <div class="form-group">
+                <label for="author">Auteur</label>
+                <input type="text" id="author" name="author" required autocomplete="off">
+            </div>
+
+            <div class="form-group">
+                <label for="cover_url">URL de la couverture (optionnel)</label>
+                <input type="url" id="cover_url" name="cover_url">
+            </div>
+
+
+            <div class="form-actions">
+                <button type="submit" class="button-primary">Enregistrer le livre</button>
+            </div>
+        </form>
+    </div>
+</main>
+{% endblock %}
