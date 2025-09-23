@@ -18,7 +18,7 @@ class Book(db.Model):
     genre = db.Column(db.String(100), nullable=True)
     rating = db.Column(db.Float, nullable=True)
     review = db.Column(db.Text, nullable=True)
-    is_read = db.Column(db.Boolean, default=False)
+    status = db.Column(db.String(50), nullable=True, default=None)
     is_favorite = db.Column(db.Boolean, default=False)
 
     def __repr__(self):

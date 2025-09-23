@@ -784,6 +784,38 @@ header h1 {
     white-space: pre-wrap;
 }
 
+.book-status-actions {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 40px;
+}
+
+.book-status-actions .button-secondary.active {
+    background-color: var(--accent);
+    color: white;
+    font-weight: 700;
+}
+
+.title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.status-badge {
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 20px;
+    text-transform: capitalize;
+}
+
+.status-reading { background-color: #e3f2fd; color: #1e88e5; } /* Bleu clair */
+.status-to_read { background-color: #e8eaf6; color: #3949ab; } /* Indigo clair */
+.status-wishlist { background-color: #fce4ec; color: #d81b60; } /* Rose clair */
+.status-read { background-color: #e0f2f1; color: #00796b; } /* Vert clair */
+
 @media (max-width: 900px) {
     .book-detail-layout {
         grid-template-columns: 1fr;

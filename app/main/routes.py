@@ -7,4 +7,6 @@ from app.models import Book
 @bp.route("/")
 def index():
     books = Book.query.all()
-    return render_template("dashboard.html", books=books)
+    readings = [book for book in books if book.status == "reading"]
+    reading = readings[0] if readings[0] else None
+    return render_template("dashboard.html", books=books, reading=reading)

@@ -18,7 +18,7 @@
                 {% if book.rating %}
                 <div class="rating-display">
                     <div class="stars-outer">
-                        <div class="stars-inner" style="width: {{ (book.rating / 5) * 100 }}%;"></div>
+                        <div class="stars-inner" style="width: {{ (book.rating / 5) * 100 }}%"></div>
                     </div>
                     <span class="rating-value">{{ book.rating }}/5</span>
                 </div>
@@ -38,14 +38,52 @@
 
         <section class="book-info-column">
             <header class="book-header">
-                <h1 class="book-title">{{ book.title }}</h1>
+                <div class="title-wrapper">
+                    <h1 class="book-title">{{ book.title }}</h1>
+                    {% if book.status %}
+                    <span class="status-badge status-{{ book.status }}">{{ book.status.replace('_', ' ') | title
+                        }}</span>
+                    {% endif %}
+                </div>
                 <h2 class="book-author">par {{ book.author }}</h2>
             </header>
 
-            <div class="book-actions">
-                <a href="#" class="button-primary">En Cours</a>
-                <a href="#" class="button-secondary">Pile à Lire</a>
-                <a href="#" class="button-secondary">WishList</a>
+            <div class="book-status-actions">
+                <!-- Formulaire pour "Lu" -->
+                <form action="{{ url_for('book.set_status') }}" method="post">
+                    <input type="hidden" name="book_id" value="{{ book.id }}">
+                    <input type="hidden" name="status" value="read">
+                    <button type="submit" class="button-secondary {% if book.status == 'read' %}active{% endif %}">
+                        Lu
+                    </button>
+                </form>
+
+                <!-- Formulaire pour "En Lecture" -->
+                <form action="{{ url_for('book.set_status') }}" method="post">
+                    <input type="hidden" name="book_id" value="{{ book.id }}">
+                    <input type="hidden" name="status" value="reading">
+                    <button type="submit" class="button-secondary {% if book.status == 'reading' %}active{% endif %}">
+                        En Cours de lecture
+                    </button>
+                </form>
+
+                <!-- Formulaire pour "PAL" (Pile à Lire) -->
+                <form action="{{ url_for('book.set_status') }}" method="post">
+                    <input type="hidden" name="book_id" value="{{ book.id }}">
+                    <input type="hidden" name="status" value="to_read">
+                    <button type="submit" class="button-secondary {% if book.status == 'to_read' %}active{% endif %}">
+                        Pile à Lire
+                    </button>
+                </form>
+
+                <!-- Formulaire pour "Wishlist" -->
+                <form action="{{ url_for('book.set_status') }}" method="post">
+                    <input type="hidden" name="book_id" value="{{ book.id }}">
+                    <input type="hidden" name="status" value="wishlist">
+                    <button type="submit" class="button-secondary {% if book.status == 'wishlist' %}active{% endif %}">
+                        Wishlist
+                    </button>
+                </form>
             </div>
 
 

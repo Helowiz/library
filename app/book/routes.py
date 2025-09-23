@@ -66,3 +66,20 @@ def add_book():
         return redirect(url_for("book.list_books"))
 
     return render_template("book/add.html")
+
+
+# UPDATE
+@bp.route("/set-status", methods=["POST"])
+def set_status():
+    book_id = request.form.get("book_id")
+    new_status = request.form.get("status")
+    book = Book.query.get_or_404(book_id)
+
+    if book.status == new_status:
+        book.status = None
+    else:
+        book.status = new_status
+
+    book.status = new_status
+    db.session.commit()
+    return redirect(url_for("book.detail_book", book_id=book_id))
