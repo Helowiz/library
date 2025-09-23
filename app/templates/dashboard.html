@@ -11,14 +11,18 @@
                 <h2>En Cours</h2>
             </div>
             <div class="widget-content">
-                <div class="book-cover large"></div>
+                <div class="book-cover large">
+                    {% if reading.cover_url %}
+                    <img src="{{ reading.cover_url }}" alt="Couverture de {{ reading.title }}">
+                    {% endif %}
+                </div>
                 <div class="book-details">
-                    <h3>Dune</h3>
-                    <p>Frank Herbert</p>
+                    <h3>{{ reading.title }}</h3>
+                    <p>{{ reading.author }}</p>
                     <div class="progress-bar">
                         <div class="progress-bar-inner" style="width: 75%;"></div>
                     </div>
-                    <span class="progress-text">75% - Page 352 / 468</span>
+                    <span class="progress-text">{{ 100*352/500 }}% - Page 352 / {{ reading.pages }}</span>
                     <div class="book-actions">
                         <a href="#">Sauvgarder</a>
                         <a href="#">Terminer</a>
