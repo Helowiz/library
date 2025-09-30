@@ -31,4 +31,4 @@ jobs:
 
       - name: Lancement des tests avec Pytest
         run: |
-          pytest
+          . pytest
