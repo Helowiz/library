@@ -18,13 +18,18 @@ def list_books():
         .join(Edition, Book.id == Edition.book_id)
         .all()
     )
-    print(books)
     return render_template("book/list.html", books=books)
 
 
 @bp.route("/<int:book_id>")
 def detail_book(book_id):
-    book = Book.query.get_or_404(book_id)
+    book = (
+        db.session.query(Book.title, Author.name, Edition.cover_url)
+        .join(Author, Book.author_id == Author.id)
+        .join(Edition, Book.id == Edition.book_id)
+        .where(book_id == Book.id)
+    )
+    print(book)
     return render_template("book/detail.html", book=book)
 
 
