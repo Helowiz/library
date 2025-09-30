@@ -48,5 +48,5 @@ jobs:
         run: |
           PYTHONPATH=. pytest
         env:
-          DATABASE_URL: "postgresql://testuser:testpassword@localhost:5432/testdb"
+          DATABASE_URL: "postgresql://user:secret@localhost:5432/library-dev"
           FLASK_ENV: "testing"
