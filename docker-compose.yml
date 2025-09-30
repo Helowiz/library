@@ -1,28 +1,28 @@
+version: '3.8'
+
 services:
-  app:
-    container_name: library-app
+  library-dev:
+    container_name: library-dev
     build: .
     ports:
-      - 5000:5000
+      - "5000:5000" 
     volumes:
       - .:/app
-    environment:
-      FLASK_DEBUG: 1
-    command: flask run -h 0.0.0.0
-  db:
-    container_name: library-db
-    image: postgres
-    ports:
-      - 5432:5432
+    env_file:
+      - .env.dev
+    restart: always
+    depends_on:
+      - db_dev
+
+  db_dev:
+    container_name: library-db-dev
+    image: postgres:14-alpine
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: secret
-      POSTGRES_DB: library-db
+      POSTGRES_DB: library-db-dev
     volumes:
-      - db_data:/var/lib/postgres/data
-  adminer:
-    image: adminer
-    ports:
-      - 8080:8080
+      - db_data_dev:/var/lib/postgresql/data
+
 volumes:
-  db_data:
+  db_data_dev:
