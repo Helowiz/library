@@ -1,5 +1,4 @@
-<!-- Fichier: app/templates/book/book_detail.html -->
-
+<!-- Fichier: app/templates/book/book_detail.html (Corrigé) -->
 {% extends "layout.html" %}
 
 {% block title %}{{ book.title }}{% endblock %}
@@ -9,12 +8,13 @@
     <article class="book-detail-layout">
         <aside class="book-cover-column">
             <div class="book-detail-cover">
-                {% if book.cover_url %}
-                <img src="{{ book.cover_url }}" alt="Couverture de {{ book.title }}">
+                {% if book.editions and book.editions[0].cover_url %}
+                <img src="{{ book.editions[0].cover_url }}" alt="Couverture de {{ book.title }}">
+                {% else %}
+                <div class="no-cover-placeholder">Pas de couverture</div>
                 {% endif %}
             </div>
             <div class="book-personal-stats">
-                <!-- NOTE SOUS FORME D'ÉTOILES -->
                 {% if book.rating %}
                 <div class="rating-display">
                     <div class="stars-outer">
@@ -26,10 +26,10 @@
 
                 <!-- STATUTS (LU / FAVORI) -->
                 <div class="status-tags">
-                    {% if book.is_read %}
+                    {% if book.state.status == 'read' %}
                     <span class="tag read-tag">✓ Lu</span>
                     {% endif %}
-                    {% if book.is_favorite %}
+                    {% if book.state.is_favorite %}
                     <span class="tag favorite-tag">★ Coup de cœur</span>
                     {% endif %}
                 </div>
@@ -41,57 +41,40 @@
                 <div class="title-wrapper">
                     <h1 class="book-title">{{ book.title }}</h1>
                     {% if book.status %}
-                    <span class="status-badge status-{{ book.status }}">{{ book.status.replace('_', ' ') | title
-                        }}</span>
+                    <span class="status-badge status-{{ book.status }}">{{ book.status.replace('_', ' ') | title }}</span>
                     {% endif %}
                 </div>
-                <h2 class="book-author">par {{ book.author }}</h2>
+                <h2 class="book-author">par {{ book.author.name }}</h2>
             </header>
 
             <div class="book-status-actions">
-                <!-- Formulaire pour "Lu" -->
                 <form action="{{ url_for('book.set_status') }}" method="post">
                     <input type="hidden" name="book_id" value="{{ book.id }}">
                     <input type="hidden" name="status" value="read">
-                    <button type="submit" class="button-secondary {% if book.status == 'read' %}active{% endif %}">
-                        Lu
-                    </button>
+                    <button type="submit" class="button-secondary {% if book.status == 'read' %}active{% endif %}">Lu</button>
                 </form>
-
-                <!-- Formulaire pour "En Lecture" -->
                 <form action="{{ url_for('book.set_status') }}" method="post">
                     <input type="hidden" name="book_id" value="{{ book.id }}">
                     <input type="hidden" name="status" value="reading">
-                    <button type="submit" class="button-secondary {% if book.status == 'reading' %}active{% endif %}">
-                        En Cours de lecture
-                    </button>
+                    <button type="submit" class="button-secondary {% if book.status == 'reading' %}active{% endif %}">En Cours</button>
                 </form>
-
-                <!-- Formulaire pour "PAL" (Pile à Lire) -->
                 <form action="{{ url_for('book.set_status') }}" method="post">
                     <input type="hidden" name="book_id" value="{{ book.id }}">
                     <input type="hidden" name="status" value="to_read">
-                    <button type="submit" class="button-secondary {% if book.status == 'to_read' %}active{% endif %}">
-                        Pile à Lire
-                    </button>
+                    <button type="submit" class="button-secondary {% if book.status == 'to_read' %}active{% endif %}">Pile à Lire</button>
                 </form>
-
-                <!-- Formulaire pour "Wishlist" -->
                 <form action="{{ url_for('book.set_status') }}" method="post">
                     <input type="hidden" name="book_id" value="{{ book.id }}">
                     <input type="hidden" name="status" value="wishlist">
-                    <button type="submit" class="button-secondary {% if book.status == 'wishlist' %}active{% endif %}">
-                        Wishlist
-                    </button>
+                    <button type="submit" class="button-secondary {% if book.status == 'wishlist' %}active{% endif %}">Wishlist</button>
                 </form>
             </div>
 
-
-            {% if book.review %}
+            {% if book.state and book.state.review %}
             <section class="user-review">
                 <h3>Avis</h3>
                 <div class="review-display">
-                    <p>{{ book.review }}</p>
+                    <p>{{ book.state.review }}</p>
                 </div>
             </section>
             {% endif %}
@@ -101,32 +84,40 @@
                 <p>{{ book.synopsis }}</p>
             </div>
 
+            {% if book.editions %}
+            {% set edition = book.editions[0] %}
             <div class="book-metadata">
                 <h3>Détails</h3>
                 <dl>
                     <div class="meta-item">
                         <dt class="meta-label">ISBN</dt>
-                        <dd class="meta-value">{{ book.isbn }}</dd>
+                        <dd class="meta-value">{{ edition.isbn or 'N/A' }}</dd>
                     </div>
                     <div class="meta-item">
                         <dt class="meta-label">Date de publication</dt>
-                        <dd class="meta-value">{{ book.published_date.strftime('%d %B %Y') if book.published_date else
-                            'N/A' }}</dd>
+                        <dd class="meta-value">{{ edition.publication_date.strftime('%d %B %Y') if edition.publication_date else 'N/A' }}</dd>
                     </div>
                     <div class="meta-item">
                         <dt class="meta-label">Nombre de pages</dt>
-                        <dd class="meta-value">{{ book.pages or 'N/A' }}</dd>
+                        <dd class="meta-value">{{ edition.number_of_pages or 'N/A' }}</dd>
                     </div>
                     <div class="meta-item">
                         <dt class="meta-label">Genre</dt>
-                        <dd class="meta-value">{{ book.genre }}</dd>
+                        <dd class="meta-value">
+                            {% for kind in book.kinds %}
+                                {{ kind.name }}{% if not loop.last %}, {% endif %}
+                            {% else %}
+                                N/A
+                            {% endfor %}
+                        </dd>
                     </div>
                     <div class="meta-item">
                         <dt class="meta-label">Langue</dt>
-                        <dd class="meta-value">{{ book.language }}</dd>
+                        <dd class="meta-value">{{ edition.language or 'N/A' }}</dd>
                     </div>
                 </dl>
             </div>
+            {% endif %}
         </section>
     </article>
 </main>

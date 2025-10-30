@@ -10,7 +10,7 @@ class Publisher(db.Model):
     editions = db.relationship("Edition", backref="publisher")
 
     def __repr__(self):
-        return f"<Publisher {self.title}>"
+        return f"<Publisher {self.name}>"
 
     @classmethod
     def search_by_name(cls, name):

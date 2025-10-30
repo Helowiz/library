@@ -6,23 +6,23 @@
 <main>
     <div class="dashboard-grid">
         <!-- WIDGET 1 : EN COURS -->
-        <section class="widget currently-reading">
+        <section class="widget currently-book">
             <div class="widget-header">
                 <h2>En Cours</h2>
             </div>
             <div class="widget-content">
                 <div class="book-cover large">
-                    {% if True  %}
-                    <img src="" alt="Couverture de ">
+                    {% if books.cover_url %}
+                    <img src="{{ books.cover_url }}" alt="Couverture de {{ books.title }}">
                     {% endif %}
                 </div>
                 <div class="book-details">
-                    <h3></h3>
-                    <p></p>
+                    <h3>{{ books.status }}</h3>
+                    <p>{{ books }}</p>
                     <div class="progress-bar">
                         <div class="progress-bar-inner" style="width: 75%;"></div>
                     </div>
-                    <span class="progress-text">{{ 100*352/500 }}% - Page 352 / </span>
+                    <span class="progress-text">{{ 100*books }}% - Page {{ books  }} / {{ books }}</span>
                     <div class="book-actions">
                         <a href="#">Sauvgarder</a>
                         <a href="#">Terminer</a>
@@ -32,7 +32,7 @@
         </section>
 
         <!-- WIDGET 2 : STATISTIQUES -->
-        <section class="widget stats-widget">
+        <!-- <section class="widget stats-widget">
             <div class="widget-header">
                 <h2>Statistiques 2024</h2>
             </div>
@@ -50,10 +50,10 @@
                     <span class="stat-label">Pages / Mois</span>
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <!-- WIDGET 3 : PROCHAINES LECTURES -->
-        <section class="widget to-read-widget">
+        <!-- <section class="widget to-read-widget">
             <div class="widget-header">
                 <h2>Prochaines Lectures</h2>
                 <a href="#" class="widget-link">Voir tout</a>
@@ -74,10 +74,10 @@
                     </li>
                 </ul>
             </div>
-        </section>
+        </section> -->
 
         <!-- WIDGET 4 : OBJECTIF DE LECTURE -->
-        <section class="widget goal-widget">
+        <!-- <section class="widget goal-widget">
             <div class="widget-header">
                 <h2>Objectif 2024</h2>
             </div>
@@ -97,10 +97,10 @@
                     <p style="color: var(--text-secondary); font-size: 0.9rem;">Plus que 10 livres pour y arriver.</p>
                 </div>
             </div>
-        </section>
+        </section>-->
 
         <!-- WIDGET 5 : ACTIVITÉ RÉCENTE -->
-        <section class="widget activity-feed">
+        <!--<section class="widget activity-feed">
             <div class="widget-header">
                 <h2>Activité Récente</h2>
             </div>
@@ -130,6 +130,6 @@
                     </li>
                 </ul>
             </div>
-        </section>
+        </section>-->
 </main>
 {% endblock %}

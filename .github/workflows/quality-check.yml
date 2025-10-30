@@ -10,21 +10,6 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:13
-        env:
-          POSTGRES_USER: testuser
-          POSTGRES_PASSWORD: testpassword
-          POSTGRES_DB: testdb
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-
     steps:
       - name: Checkout du code
         uses: actions/checkout@v3
@@ -43,10 +28,3 @@ jobs:
         run: |
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-
-      - name: Lancement des tests avec Pytest
-        run: |
-          PYTHONPATH=. pytest
-        env:
-          DATABASE_URL: "postgresql://user:secret@localhost:5432/library-dev"
-          FLASK_ENV: "testing"

@@ -1,5 +1,5 @@
 import os
-
+import logging
 from flask import Flask
 
 from .config import Config
@@ -7,11 +7,18 @@ from .extensions import db, migrate
 from .models import Book
 
 
-def create_app(config_class=Config):
+def create_app():
     app = Flask(__name__)
-    app.config.from_object(Config)
+    env = os.environ.get("FLASK_ENV", "development")
+    
+    print(f"Current Environment: {env}")
+    if env == "production":
+        app.config.from_object("app.config.ProductionConfig")
+        logging.basicConfig(level=logging.INFO)
+    else:
+        app.config.from_object("app.config.DevelopmentConfig")
+        logging.basicConfig(level=logging.DEBUG)
 
-    print(f"Current Environment: {os.getenv('ENVIRONMENT')}")
 
     # Initialize Flask extensions here
     db.init_app(app)

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import flash, redirect, render_template, request, url_for
+from flask import flash, redirect, render_template, request, url_for, current_app, abort
 
 from app.book import bp
 from app.extensions import db
@@ -23,14 +23,24 @@ def list_books():
 
 @bp.route("/<int:book_id>")
 def detail_book(book_id):
-    book = (
-        db.session.query(Book.title, Author.name, Edition.cover_url)
-        .join(Author, Book.author_id == Author.id)
-        .join(Edition, Book.id == Edition.book_id)
-        .where(book_id == Book.id)
-    )
-    print(book)
-    return render_template("book/detail.html", book=book)
+    current_app.logger.info(f"Recherche du livre avec l'ID : {book_id}")
+    
+    try:
+        book = Book.get_book_with_all_data(book_id)
+
+        if book is None:
+            current_app.logger.warning(f"Aucun livre trouvé pour l'ID : {book_id}. Renvoi d'une erreur 404.")
+            abort(404) 
+
+        current_app.logger.debug(f"Livre trouvé : {book}")
+        return render_template("book/detail.html", book=book)
+
+    except Exception as e:
+        current_app.logger.error(
+            f"Une erreur est survenue lors de la récupération du livre ID {book_id}", 
+            exc_info=True
+        )
+        abort(500)
 
 
 # CREATE
@@ -52,11 +62,13 @@ def add_book():
         language = request.form["language"]
 
         author_instance = Author.get_or_create(author)
+
         new_book = Book.get_or_create(
             title=title, author_id=author_instance.id, synopsis=synopsis, status=None
         )
         publisher_instance = Publisher.get_or_create(publisher_name)
-        new_edition = Edition.get_or_create(
+        
+        Edition.get_or_create(
             isbn=isbn,
             published_date=published_date,
             cover_url=cover_url,
@@ -66,7 +78,7 @@ def add_book():
             publisher=publisher_instance,
         )
 
-        kind_instance = Kind(name=request.form.get("genre").strip())
+        kind_instance = Kind.get_or_create(name=request.form.get("genre").strip())
         new_book.kinds.append(kind_instance)
 
         db.session.add(kind_instance)
@@ -87,15 +99,7 @@ def add_book():
 # UPDATE
 @bp.route("/set-status", methods=["POST"])
 def set_status():
-    book_id = request.form.get("book_id")
-    new_status = request.form.get("status")
-    book = Book.query.get_or_404(book_id)
+    book_id = request.form["book_id"]
+    new_status = request.form["status"]    
 
-    if book.status == new_status:
-        book.status = None
-    else:
-        book.status = new_status
-
-    book.status = new_status
-    db.session.commit()
     return redirect(url_for("book.detail_book", book_id=book_id))

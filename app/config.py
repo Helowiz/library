@@ -1,18 +1,13 @@
 import os
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-
-
 class Config:
-    SECRET_KEY = os.environ.get("SECRET_KEY") or "you-will-never-guess"
-
-    DB_USER = os.environ.get("DB_USER", "user")
-    DB_PASS = os.environ.get("DB_PASSWORD", "secret")
-    DB_HOST = os.environ.get("DB_HOST", "localhost")
-    DB_PORT = os.environ.get("DB_PORT", "5432")
-    DB_NAME = os.environ.get("DB_NAME", "library-db-dev")
-
-    SQLALCHEMY_DATABASE_URI = (
-        f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-    )
+    SECRET_KEY = os.environ.get('SECRET_KEY')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+class DevelopmentConfig(Config):
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = 'postgresql://user:ultrasecret1@localhost:5434/library_dev'
+
+class ProductionConfig(Config):
+    DEBUG = False
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')

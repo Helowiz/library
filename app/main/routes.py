@@ -1,10 +1,11 @@
 from flask import render_template
 
 from app.main import bp
-from app.models import Book
+from app.models.book import BookState
 
 
 @bp.route("/")
 def index():
-    books = Book.query.all()
-    return render_template("dashboard.html", books=books)
+    reading = BookState.get_reading_books()
+    print(reading)
+    return render_template("dashboard.html", books=reading)
