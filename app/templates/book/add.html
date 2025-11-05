@@ -1,103 +1,41 @@
+<!-- Fichier: app/templates/book/add_book.html -->
 {% extends "layout.html" %}
 
-{% block title %}Ajouter un Livre{% endblock %}
+{% block title %}Ajouter un nouveau livre{% endblock %}
 
 {% block content %}
-<main>
-    <div class="form-container">
-        <h2 class="form-title">Ajouter un Nouveau Livre</h2>
-        <p class="form-subtitle">Remplissez les informations ci-dessous pour ajouter un livre à votre collection.</p>
+<div class="form-container">
+    <h1 class="form-title">Ajouter un nouveau livre</h1>
+    <p class="form-subtitle">Remplissez les informations ci-dessous pour ajouter un livre à votre collection.</p>
 
-        <form action="" method="post">
+    <!-- Le formulaire poste sur la même URL et est géré par la route add_book -->
+    <form method="POST" novalidate>
+        <!-- Protection CSRF, très importante ! -->
+        {{ form.hidden_tag() }}
 
-            <!-- GROUPE 1: INFORMATIONS ESSENTIELLES -->
-            <fieldset>
-                <legend>Informations Essentielles</legend>
-                <div class="form-group">
-                    <label for="title">Titre du livre</label>
-                    <input type="text" id="title" name="title" required autocomplete="off">
-                </div>
-                <div class="form-group">
-                    <label for="author">Auteur</label>
-                    <input type="text" id="author" name="author" required autocomplete="off">
-                </div>
-            </fieldset>
+        <div class="form-group">
+            {{ form.title.label }}
+            {{ form.title() }} {# WTForms génère l'input <input type="text"> #}
+        </div>
 
-            <!-- GROUPE 2: DÉTAILS & CONTENU -->
-            <fieldset>
-                <legend>Détails & Contenu</legend>
-                <div class="form-group">
-                    <label for="cover_url">URL de la couverture</label>
-                    <input type="url" id="cover_url" name="cover_url" placeholder="https://exemple.com/image.jpg">
-                </div>
-                <div class="form-group">
-                    <label for="synopsis">Résumé</label>
-                    <textarea id="synopsis" name="synopsis" rows="4"></textarea>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="pages">Nombre de pages</label>
-                        <input type="number" id="pages" name="pages">
-                    </div>
-                    <div class="form-group">
-                        <label for="genre">Genre</label>
-                        <input type="text" id="genre" name="genre">
-                    </div>
-                </div>
-            </fieldset>
+        <div class="form-group">
+            {{ form.author.label }}
+            {{ form.author() }}
+        </div>
 
-            <!-- GROUPE 3: DÉTAILS DE PUBLICATION -->
-            <fieldset>
-                <legend>Détails de Publication</legend>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="isbn">ISBN</label>
-                        <input type="text" id="isbn" name="isbn">
-                    </div>
-                    <div class="form-group">
-                        <label for="publisher">Éditeur</label>
-                        <input type="text" id="publisher" name="publisher">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="published_date">Date de publication</label>
-                        <input type="date" id="published_date" name="published_date">
-                    </div>
-                    <div class="form-group">
-                        <label for="language">Langue</label>
-                        <input type="text" id="language" name="language">
-                    </div>
-                </div>
-            </fieldset>
+        <div class="form-group">
+            {{ form.url.label }}
+            {{ form.url() }}
+        </div>
 
-            <!-- GROUPE 4: VOTRE EXPÉRIENCE (OPTIONNEL) -->
-            <fieldset>
-                <legend>Votre Expérience</legend>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="rating">Note (sur 5)</label>
-                        <input type="number" id="rating" name="rating" step="0.5" min="0" max="5">
-                    </div>
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="is_read" name="is_read">
-                        <label for="is_read">J'ai lu ce livre</label>
-                    </div>
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="is_favorite" name="is_favorite">
-                        <label for="is_favorite">Coup de cœur</label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="review">Votre avis</label>
-                    <textarea id="review" name="review" rows="3"></textarea>
-                </div>
-            </fieldset>
-
-            <div class="form-actions">
-                <button type="submit" class="button-primary">Enregistrer le livre</button>
-            </div>
-        </form>
-    </div>
-</main>
+        <div class="form-group">
+            {{ form.synopsis.label }}
+            {{ form.synopsis(rows="8") }} {# On peut passer des attributs HTML directement #}
+        </div>
+        
+        <div class="form-actions">
+            {{ form.submit(class="button-primary") }}
+        </div>
+    </form>
+</div>
 {% endblock %}

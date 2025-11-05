@@ -7,28 +7,7 @@
     <div class="dashboard-grid">
         <!-- WIDGET 1 : EN COURS -->
         <section class="widget currently-book">
-            <div class="widget-header">
-                <h2>En Cours</h2>
-            </div>
-            <div class="widget-content">
-                <div class="book-cover large">
-                    {% if books.cover_url %}
-                    <img src="{{ books.cover_url }}" alt="Couverture de {{ books.title }}">
-                    {% endif %}
-                </div>
-                <div class="book-details">
-                    <h3>{{ books.status }}</h3>
-                    <p>{{ books }}</p>
-                    <div class="progress-bar">
-                        <div class="progress-bar-inner" style="width: 75%;"></div>
-                    </div>
-                    <span class="progress-text">{{ 100*books }}% - Page {{ books  }} / {{ books }}</span>
-                    <div class="book-actions">
-                        <a href="#">Sauvgarder</a>
-                        <a href="#">Terminer</a>
-                    </div>
-                </div>
-            </div>
+
         </section>
 
         <!-- WIDGET 2 : STATISTIQUES -->
