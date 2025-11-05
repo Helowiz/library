@@ -10,7 +10,8 @@ from app.models.book import Book
 # READ
 @bp.route("/")
 def list_books():
-    return render_template("book/list.html")
+    books = db.session.query(Book).all()
+    return render_template("book/list.html", books=books)
 
 
 @bp.route("/<int:book_id>")
