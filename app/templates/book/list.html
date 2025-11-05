@@ -16,7 +16,9 @@
             <p>{{ book.name }}</p>
         </div>
         {% else %}
-        <p>Aucun livre dans votre bibliothèque pour le moment.</p>
+        <div class="no-books">
+            <p>Aucun livre dans votre bibliothèque pour le moment.</p>
+        </div> 
         {% endfor %}
     </div>
 </main>

@@ -747,6 +747,7 @@ header h1 {
 .book-synopsis p {
     line-height: 1.7;
     color: var(--text-secondary);
+    white-space: pre-wrap;
 }
 
 .book-metadata dl {
@@ -832,4 +833,8 @@ header h1 {
     .book-info-column .book-author {
         font-size: 1.2rem;
     }
+}
+
+.no-books {
+    white-space: nowrap;
 }
