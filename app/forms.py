@@ -8,3 +8,6 @@ class BookForm(FlaskForm):
     url = StringField("URL de la couverture", validators=[URL(), Length(max=256)])
     synopsis = TextAreaField('Résumé', validators=[DataRequired()])
     submit = SubmitField('Enregistrer le livre')
+
+class DeleteBookForm(FlaskForm):
+    pass
