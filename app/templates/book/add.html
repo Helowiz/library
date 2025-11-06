@@ -1,45 +1,41 @@
+<!-- Fichier: app/templates/book/add_book.html -->
 {% extends "layout.html" %}
 
-{% block title %}Ajouter un Livre{% endblock %}
+{% block title %}Ajouter un nouveau livre{% endblock %}
 
 {% block content %}
-<main>
-    <div class="form-container">
-        <h2 class="form-title">Ajouter un Nouveau Livre</h2>
-        <p class="form-subtitle">Remplissez les informations ci-dessous pour ajouter un livre à votre collection.</p>
+<div class="form-container">
+    <h1 class="form-title">Ajouter un nouveau livre</h1>
+    <p class="form-subtitle">Remplissez les informations ci-dessous pour ajouter un livre à votre collection.</p>
 
-        <form action="" method="post">
+    <!-- Le formulaire poste sur la même URL et est géré par la route add_book -->
+    <form method="POST" novalidate>
+        <!-- Protection CSRF, très importante ! -->
+        {{ form.hidden_tag() }}
 
-            <!-- GROUPE 1: INFORMATIONS ESSENTIELLES -->
-            <fieldset>
-                <legend>Informations Essentielles</legend>
-                <div class="form-group">
-                    <label for="title">Titre du livre</label>
-                    <input type="text" id="title" name="title" required autocomplete="off">
-                </div>
-                <div class="form-group">
-                    <label for="author">Auteur</label>
-                    <input type="text" id="author" name="author" required autocomplete="off">
-                </div>
-            </fieldset>
+        <div class="form-group">
+            {{ form.title.label }}
+            {{ form.title() }} {# WTForms génère l'input <input type="text"> #}
+        </div>
 
-            <!-- GROUPE 2: DÉTAILS & CONTENU -->
-            <fieldset>
-                <legend>Détails & Contenu</legend>
-                <div class="form-group">
-                    <label for="url">URL de la couverture</label>
-                    <input type="url" id="url" name="url" placeholder="https://exemple.com/image.jpg">
-                </div>
-                <div class="form-group">
-                    <label for="synopsis">Résumé</label>
-                    <textarea id="synopsis" name="synopsis" rows="4"></textarea>
-                </div>
-            </fieldset>
+        <div class="form-group">
+            {{ form.author.label }}
+            {{ form.author() }}
+        </div>
 
-            <div class="form-actions">
-                <button type="submit" class="button-primary">Enregistrer le livre</button>
-            </div>
-        </form>
-    </div>
-</main>
+        <div class="form-group">
+            {{ form.url.label }}
+            {{ form.url() }}
+        </div>
+
+        <div class="form-group">
+            {{ form.synopsis.label }}
+            {{ form.synopsis(rows="8") }} {# On peut passer des attributs HTML directement #}
+        </div>
+        
+        <div class="form-actions">
+            {{ form.submit(class="button-primary") }}
+        </div>
+    </form>
+</div>
 {% endblock %}
