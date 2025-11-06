@@ -812,11 +812,6 @@ header h1 {
     text-transform: capitalize;
 }
 
-.status-reading { background-color: #e3f2fd; color: #1e88e5; } /* Bleu clair */
-.status-to_read { background-color: #e8eaf6; color: #3949ab; } /* Indigo clair */
-.status-wishlist { background-color: #fce4ec; color: #d81b60; } /* Rose clair */
-.status-read { background-color: #e0f2f1; color: #00796b; } /* Vert clair */
-
 @media (max-width: 900px) {
     .book-detail-layout {
         grid-template-columns: 1fr;
@@ -837,4 +832,20 @@ header h1 {
 
 .no-books {
     white-space: nowrap;
+}
+
+.button-danger {
+    background-color: #dc3545; /* Un rouge standard pour le danger */
+    color: white;
+    padding: 14px 28px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.button-danger:hover {
+    background-color: #c82333; /* Un rouge plus foncé au survol */
 }

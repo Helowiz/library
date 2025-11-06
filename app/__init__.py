@@ -9,7 +9,7 @@ from .models import Book
 
 def create_app():
     app = Flask(__name__)
-    env = os.environ.get("FLASK_ENV", "development")
+    env = os.environ.get("FLASK_ENV", "developpment")
     
     print(f"Current Environment: {env}")
     if env == "production":
