@@ -42,7 +42,7 @@ def add_book():
         return redirect(url_for('book.detail_book', book_id=new_book.id))
     return render_template('book/add.html', form=form)
 
-@bp.route('/book/edit/<int:book_id>/', methods=['GET', 'POST'])
+@bp.route('/edit/<int:book_id>/', methods=['GET', 'POST'])
 def edit_book(book_id):
     book = Book.query.get_or_404(book_id)
     
@@ -56,7 +56,7 @@ def edit_book(book_id):
         
     return render_template('book/edit.html', form=form, book=book)
 
-@bp.route('/book/delete/<int:book_id>', methods=['POST'])
+@bp.route('/delete/<int:book_id>', methods=['POST'])
 def delete_book(book_id):
     book = Book.query.get_or_404(book_id)
     
