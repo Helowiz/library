@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %}Modifier {{ book.title }}{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1 class="form-title">Modifier "{{ book.title }}"</h1>
+    <p class="form-subtitle">Mettez à jour les informations du livre ci-dessous.</p>
+    
+    {% set button_text = "Enregistrer les modifications" %}
+
+    {% include "book/_form.html" with context %}
+</div>
+{% endblock %}
