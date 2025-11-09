@@ -686,12 +686,6 @@ header h1 {
     flex-direction: column;
 }
 
-.book-header {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-}
-
 .book-info-column .book-title {
     font-size: 3.5rem;
     font-weight: 900;
@@ -802,6 +796,7 @@ header h1 {
     align-items: center;
     gap: 20px;
     flex-wrap: wrap;
+    margin-bottom: 4px;
 }
 
 .status-badge {
@@ -848,4 +843,178 @@ header h1 {
 
 .button-danger:hover {
     background-color: #c82333; /* Un rouge plus foncé au survol */
+}
+
+/* Style de base pour toutes les alertes */
+.alert {
+    padding: 15px;
+    margin: 15px auto; /* Centrer et espacer */
+    border: 1px solid transparent;
+    border-radius: 4px;
+    max-width: 800px; /* Limiter la largeur sur les grands écrans */
+    text-align: center;
+    font-family: sans-serif;
+}
+
+/* Style pour les messages de succès (verts) */
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+/* Style pour les messages d'avertissement (jaunes/oranges) */
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+
+/* Vous pouvez ajouter d'autres styles, par exemple pour les erreurs (rouges) */
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+
+.status-badge.status-read {
+    background-color: #e6f8f5;
+    color: #00875a;
+}
+
+.status-badge.status-reading {
+    background-color: #fff9e6;
+    color: #f79a00;
+}
+
+.status-badge.status-tbr {
+    background-color: #fff2ef;
+    color: #e85938;
+}
+
+.status-badge.status-wishlist {
+    background-color: #f4eefc;
+    color: #7a44c9;
+}
+
+
+/* ==========================================================================
+   8. REFONTE DE L'INTERFACE D'ACTIONS (NOUVEAU)
+   ========================================================================== */
+
+/* --- 8.1 Ajustement de l'en-tête --- */
+.book-header {
+    display: flex;
+    justify-content: space-between; /* Aligne le titre à gauche et les actions à droite */
+    align-items: flex-start; /* Aligne en haut */
+    border-bottom: 1px solid var(--surface-light);
+    padding-bottom: 20px;
+    margin-bottom: 0; /* La marge sera gérée par le conteneur du sélecteur */
+}
+
+/* --- 8.2 Nouveau menu d'actions (trois points) --- */
+.book-header-actions {
+    position: relative; /* Contexte pour le positionnement du menu déroulant */
+    flex-shrink: 0; /* Empêche le menu de se réduire */
+}
+
+.menu-toggle-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.menu-toggle-button:hover {
+    background-color: var(--surface-light);
+    color: var(--text-primary);
+}
+
+.actions-dropdown {
+    display: none; /* Caché par défaut */
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--background);
+    border: 1px solid var(--surface-light);
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    padding: 8px 0;
+    min-width: 160px;
+    overflow: hidden;
+}
+
+.actions-dropdown.show {
+    display: block; /* Rendu visible par JavaScript */
+}
+
+.actions-dropdown a,
+.actions-dropdown .delete-button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-weight: 600;
+}
+
+.actions-dropdown a:hover,
+.actions-dropdown .delete-button:hover {
+    background-color: var(--surface-light);
+}
+
+.actions-dropdown .delete-button {
+    color: #dc3545; /* Couleur rouge pour l'action de suppression */
+}
+
+
+/* --- 8.3 Améliorations du sélecteur de statut --- */
+.status-selector-container {
+    padding: 30px 0;
+    margin-bottom: 20px;
+}
+
+.status-selector-group {
+    display: inline-flex;
+    background-color: var(--surface-light);
+    border-radius: 50px;
+    padding: 5px;
+    gap: 5px;
+}
+
+.status-button {
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    background-color: transparent;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 8px 20px;
+    border-radius: 50px;
+    transition: all 0.25s ease-in-out;
+}
+
+.status-button:not(.active):hover {
+    color: var(--text-primary);
+}
+
+.status-button.active {
+    background-color: var(--background);
+    color: var(--accent);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }

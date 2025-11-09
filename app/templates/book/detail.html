@@ -8,8 +8,8 @@
     <article class="book-detail-layout">
         <aside class="book-cover-column">
             <div class="book-detail-cover">
-                {% if book.url %}
-                <img src="{{ book.url }}" alt="Couverture de {{ book.title }}">
+                {% if book.cover_url %}
+                <img src="{{ book.cover_url }}" alt="Couverture de {{ book.title }}">
                 {% else %}
                 <div class="no-cover-placeholder">Pas de couverture</div>
                 {% endif %}
@@ -18,23 +18,65 @@
 
         <section class="book-info-column">
             <header class="book-header">
-                <div class="title-wrapper">
-                    <h1 class="book-title">{{ book.title }}</h1>
+                <div class="book-title-block">
+                    <div class="title-wrapper">
+                        {% if book.reading_status and book.reading_status.status %}
+                        <span class="status-badge status-{{ book.reading_status.status.name | lower }}">
+                            {{ book.reading_status.status.value }}
+                        </span>
+                        {% endif %}
+                        <h1 class="book-title">{{ book.title }}</h1>
+                    </div>
+                    <h2 class="book-author">par {{ book.author }}</h2>
                 </div>
-                <h2 class="book-author">par {{ book.author }}</h2>
+                <div class="book-header-actions">
+                    <button class="menu-toggle-button" id="menu-toggle" aria-label="Ouvrir le menu d'actions">
+                        <!-- Icône SVG pour les trois points -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="1"></circle>
+                            <circle cx="12" cy="5" r="1"></circle>
+                            <circle cx="12" cy="19" r="1"></circle>
+                        </svg>
+                    </button>
+                    <div class="actions-dropdown" id="actions-menu">
+                        <a href="{{ url_for('book.edit_book', book_id=book.id) }}">Modifier</a>
+                        <!-- Le formulaire de suppression est maintenant déclenché par un lien/bouton dans le menu -->
+                        <form method="POST" action="{{ url_for('book.delete_book', book_id=book.id) }}" id="delete-form"
+                            style="margin: 0;">
+                            {{ delete_form.hidden_tag() }}
+                            <button type="button" class="delete-button"
+                                onclick="if(confirm('Êtes-vous sûr(e) de vouloir supprimer ce livre ?')) document.getElementById('delete-form').submit();">
+                                Supprimer
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </header>
 
-            <div class="book-actions">
-                <a href="{{ url_for('book.edit_book', book_id=book.id) }}" class="button-primary">Modifier</a>
-                <form method="POST" action="{{ url_for('book.delete_book', book_id=book.id) }}"
-                    style="display: inline;">
-                    {{ delete_form.hidden_tag() }}
-                    <button type="submit" class="button-danger"
-                        onclick="return confirm('Êtes-vous sûr(e) de vouloir supprimer ce livre ?');">
-                        Supprimer
-                    </button>
-                </form>
+            <div class="status-selector-container">
+                <div class="status-selector-group">
+                    <form method="POST" action="{{ url_for('book.update_status', book_id=book.id) }}">
+                        <button type="submit" name="status" value="TBR"
+                            class="status-button {% if not book.reading_status or book.reading_status.status == BookStatus.TBR %}active{% endif %}">À
+                            lire</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('book.update_status', book_id=book.id) }}">
+                        <button type="submit" name="status" value="READING"
+                            class="status-button {% if book.reading_status and book.reading_status.status == BookStatus.READING %}active{% endif %}">En
+                            cours</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('book.update_status', book_id=book.id) }}">
+                        <button type="submit" name="status" value="READ"
+                            class="status-button {% if book.reading_status and book.reading_status.status == BookStatus.READ %}active{% endif %}">Lu</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('book.update_status', book_id=book.id) }}">
+                        <button type="submit" name="status" value="WISHLIST"
+                            class="status-button {% if book.reading_status and book.reading_status.status == BookStatus.WISHLIST %}active{% endif %}">Wishlist</button>
+                    </form>
+                </div>
             </div>
+
 
             <div class="book-synopsis">
                 <h3>Résumé</h3>
@@ -44,4 +86,23 @@
         </section>
     </article>
 </main>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const menuToggle = document.getElementById('menu-toggle');
+        const actionsMenu = document.getElementById('actions-menu');
+
+        if (menuToggle && actionsMenu) {
+            menuToggle.addEventListener('click', function (event) {
+                event.stopPropagation();
+                actionsMenu.classList.toggle('show');
+            });
+
+            document.addEventListener('click', function (event) {
+                if (!actionsMenu.contains(event.target) && !menuToggle.contains(event.target)) {
+                    actionsMenu.classList.remove('show');
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}

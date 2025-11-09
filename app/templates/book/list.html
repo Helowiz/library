@@ -9,8 +9,8 @@
         {% for book in books %}
         <div class="book-card">
             <a href="{{ book.id }}"> <div class="book-cover">
-                {% if book.url %}
-                <img src="{{ book.url }}" alt="Couverture de {{ book.title }}">
+                {% if book.cover_url %}
+                <img src="{{ book.cover_url }}" alt="Couverture de {{ book.title }}">
                 {% endif %}
             </div> </a>
             <h3>{{ book.title }}</h3>
