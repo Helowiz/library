@@ -78,6 +78,27 @@ def update_status(book_id):
 
     return redirect(url_for('book.detail_book', book_id=book.id))
 
+@bp.route('/book/<int:book_id>/progress', methods=['POST'])
+def update_progress(book_id):
+    book = Book.query.get_or_404(book_id)
+    try:
+        pages_read = int(request.form.get('pages_read', 0))
+    except ValueError:
+        flash('Veuillez entrer un nombre valide de pages lues.', 'danger')
+        return redirect(url_for('book.detail_book', book_id=book.id))
+
+    if pages_read < 0 or pages_read > book.number_of_pages:
+        flash('Le nombre de pages lues doit être entre 0 et le nombre total de pages du livre.', 'danger')
+    else:
+        if not book.reading_status:
+            book.reading_status = Reading()
+
+        book.reading_status.current_page = pages_read
+        db.session.commit()
+        flash(f'Progrès mis à jour : {pages_read} pages lues.', 'success')
+
+    return redirect(url_for('main.index', book_id=book.id))
+
 # DELETE
 
 @bp.route('/delete/<int:book_id>', methods=['POST'])
