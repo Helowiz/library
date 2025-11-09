@@ -300,6 +300,11 @@ header h1 {
     font-size: 0.9rem;
 }
 
+.book-title-block {
+    display: flex;
+    flex-direction: column;
+}
+
 /* --- 4.5 Widget "Objectif Annuel" --- */
 .goal-widget .widget-content {
     display: flex;
@@ -805,6 +810,7 @@ header h1 {
     padding: 5px 12px;
     border-radius: 20px;
     text-transform: capitalize;
+    margin: auto auto 20px 0 ;
 }
 
 @media (max-width: 900px) {
