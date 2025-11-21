@@ -5,58 +5,105 @@
 {% block content %}
 <main>
     <div class="dashboard-grid">
-        <!-- WIDGET 1 : EN COURS -->
         <section class="widget currently-book">
-
-        </section>
-
-        <!-- WIDGET 2 : STATISTIQUES -->
-        <!-- <section class="widget stats-widget">
             <div class="widget-header">
-                <h2>Statistiques 2024</h2>
+                <h2>Lecture en cours</h2>
             </div>
-            <div class="widget-content">
-                <div class="stat-item">
-                    <span class="stat-value">12</span>
-                    <span class="stat-label">Livres Lus</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-value">4,812</span>
-                    <span class="stat-label">Pages Lues</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-value">401</span>
-                    <span class="stat-label">Pages / Mois</span>
-                </div>
-            </div>
-        </section> -->
 
-        <!-- WIDGET 3 : PROCHAINES LECTURES -->
-        <!-- <section class="widget to-read-widget">
-            <div class="widget-header">
-                <h2>Prochaines Lectures</h2>
-                <a href="#" class="widget-link">Voir tout</a>
-            </div>
             <div class="widget-content">
-                <ul class="book-list">
-                    <li>
-                        <span class="book-title">Fondation</span>
-                        <span class="book-author">Isaac Asimov</span>
-                    </li>
-                    <li>
-                        <span class="book-title">Hyperion</span>
-                        <span class="book-author">Dan Simmons</span>
-                    </li>
-                    <li>
-                        <span class="book-title">Le Problème à Trois Corps</span>
-                        <span class="book-author">Cixin Liu</span>
-                    </li>
-                </ul>
-            </div>
-        </section> -->
+                {% if book %}
+                <div class="book-dashboard-card">
+                    <a href="{{ url_for('book.detail_book', book_id=book.id) }}">
+                        <div class="book-dashboard-cover">
+                            {% if book.cover_url %}
+                            <img src="{{ book.cover_url }}" alt="Couverture de {{ book.title }}">
+                            {% endif %}
+                        </div>
+                        <h3>{{ book.title }}</h3>
+                    </a>
 
-        <!-- WIDGET 4 : OBJECTIF DE LECTURE -->
-        <!-- <section class="widget goal-widget">
+                    <div class="progress-info">
+                        <span>Page {{ book.reading_status.current_page or 0 }} / {{ book.number_of_pages or '?' }}</span>
+                        {% if book.number_of_pages and book.number_of_pages > 0 %}
+                        <span class="progress-percent">
+                            {{ ((book.reading_status.current_page or 0) * 100 / book.number_of_pages) | round | int }}%
+                        </span>
+                        {% endif %}
+                    </div>
+
+                    <div class="progress-bar-dash">
+                        {% if book.number_of_pages and book.number_of_pages > 0 %}
+                        <div class="progress-bar-inner-dash"
+                            style="width: {{ ((book.reading_status.current_page or 0) * 100 / book.number_of_pages) }}%;">
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <form class="update-progress-form" method="POST"
+                        action="{{ url_for('book.update_progress', book_id=book.id) }}">
+                        <input type="number" name="pages_read" class="progress-input" placeholder="Page n°" required>
+                        <button type="submit" class="progress-submit-btn" aria-label="Mettre à jour la page">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="currentColor">
+                                <path
+                                    d="M9.00004 16.17L4.83004 12L3.41004 13.41L9.00004 19L21 7.00003L19.59 5.59003L9.00004 16.17Z">
+                                </path>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+                {% else %}
+                <p class="no-book-reading">Vous ne lisez aucun livre pour le moment.</p>
+                {% endif %}
+            </div>
+            </section>  
+
+            <!-- WIDGET 2 : STATISTIQUES -->
+            <section class="widget stats-widget">
+                <div class="widget-header">
+                    <h2>Statistiques 2024</h2>
+                </div>
+                <div class="widget-content">
+                    <div class="stat-item">
+                        <span class="stat-value">12</span>
+                        <span class="stat-label">Livres Lus</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">4,812</span>
+                        <span class="stat-label">Pages Lues</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">401</span>
+                        <span class="stat-label">Pages / Mois</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- WIDGET 3 : PROCHAINES LECTURES -->
+            <section class="widget to-read-widget">
+                <div class="widget-header">
+                    <h2>Prochaines Lectures</h2>
+                    <a href="#" class="widget-link">Voir tout</a>
+                </div>
+                <div class="widget-content">
+                    <ul class="book-list">
+                        <li>
+                            <span class="book-title">Fondation</span>
+                            <span class="book-author">Isaac Asimov</span>
+                        </li>
+                        <li>
+                            <span class="book-title">Hyperion</span>
+                            <span class="book-author">Dan Simmons</span>
+                        </li>
+                        <li>
+                            <span class="book-title">Le Problème à Trois Corps</span>
+                            <span class="book-author">Cixin Liu</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            <!-- WIDGET 4 : OBJECTIF DE LECTURE -->
+            <!-- <section class="widget goal-widget">
             <div class="widget-header">
                 <h2>Objectif 2024</h2>
             </div>
@@ -78,8 +125,8 @@
             </div>
         </section>-->
 
-        <!-- WIDGET 5 : ACTIVITÉ RÉCENTE -->
-        <!--<section class="widget activity-feed">
+            <!-- WIDGET 5 : ACTIVITÉ RÉCENTE -->
+            <!--<section class="widget activity-feed">
             <div class="widget-header">
                 <h2>Activité Récente</h2>
             </div>

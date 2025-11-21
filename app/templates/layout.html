@@ -20,11 +20,46 @@
             <a href="{{ url_for('book.list_books') }}">Collection</a>
         </nav>
 
-        <a href="{{ url_for('book.add_book') }}" class="add-button">+ Ajouter un livre</a>
+        <a href="{{ url_for('book.add_book') }}" class="button button-primary">+ Ajouter un livre</a>
     </header>
     <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div id="flash-container">
+            {% for category, message in messages %}
+            <div class="flash-message flash-{{ category }}">
+                <div class="flash-icon">
+                    <!-- On choisit une icône en fonction de la catégorie -->
+                    {% if category == 'success' %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                        fill="currentColor">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z">
+                        </path>
+                    </svg>
+                    {% elif category == 'danger' %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                        fill="currentColor">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z">
+                        </path>
+                    </svg>
+                    {% else %} <!-- Pour 'warning', 'info', etc. -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                        fill="currentColor">
+                        <path d="M11 7h2v6h-2zm0 8h2v2h-2z"></path>
+                    </svg>
+                    {% endif %}
+                </div>
+                <span class="flash-text">{{ message }}</span>
+                <button class="flash-close" aria-label="Fermer">&times;</button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
         {% block content %}{% endblock %}
     </div>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
-
 </html>

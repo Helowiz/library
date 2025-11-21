@@ -7,8 +7,24 @@
     --text-primary: #111111;
     --text-secondary: #666666;
     --accent: #0055FF;
+    --accent-darker: #003db3;
+    --danger: #dc3545;
+    --danger-darker: #c82333;
     --surface-light: #F0F0F0;
     --font-sans: 'Inter', sans-serif;
+    --border-light: 1px solid var(--surface-light);
+
+    --status-read-bg: #e6f8f5;
+    --status-read-fg: #00875a;
+
+    --status-reading-bg: #fff9e6;
+    --status-reading-fg: #f79a00;
+
+    --status-tbr-bg: #fff2ef;
+    --status-tbr-fg: #e85938;
+
+    --status-wishlist-bg: #f4eefc;
+    --status-wishlist-fg: #7a44c9;
 }
 
 * {
@@ -21,46 +37,42 @@ body {
     font-family: var(--font-sans);
     background-color: var(--background);
     color: var(--text-primary);
-    padding: 5vw;
-    padding-top: 2vw;
+    padding: 2vw 5vw;
 }
 
 /* ==========================================================================
    2. STRUCTURES DE PAGE & LAYOUTS
    ========================================================================== */
 
-/* Conteneur principal centré */
 .container {
     max-width: 1200px;
     margin: 0 auto;
 }
 
-/* En-tête de page */
-header {
+header, .book-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 60px;
-    border-bottom: 1px solid var(--surface-light);
+    border-bottom: var(--border-light);
     padding-bottom: 20px;
 }
 
-header h1 {
+header h1, .header-title {
     font-size: 2rem;
     font-weight: 900;
     letter-spacing: -1.5px;
+    color: var(--text-primary);
+    text-decoration: none;
 }
 
-/* Grille pour la liste de tous les livres */
 .book-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 40px 30px;
 }
 
-/* Grilles pour les tableaux de bord */
-.dashboard-grid,
-.dashboard-layout {
+.dashboard-grid, .dashboard-layout {
     display: grid;
     gap: 40px;
 }
@@ -73,47 +85,77 @@ header h1 {
     grid-template-columns: 2fr 1fr;
 }
 
-.main-column,
-.sidebar-column {
+.main-column, .sidebar-column {
     display: flex;
     flex-direction: column;
     gap: 40px;
 }
 
-/* Responsive: une seule colonne sur les petits écrans */
 @media (max-width: 900px) {
     .dashboard-layout {
         grid-template-columns: 1fr;
     }
 }
 
-
 /* ==========================================================================
    3. COMPOSANTS RÉUTILISABLES
    ========================================================================== */
 
-.add-button {
-    background-color: var(--accent);
-    color: white;
-    padding: 12px 20px;
-    text-decoration: none;
+.button  {
+    display: inline-flex; 
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    
+    padding: 12px 24px;
     font-weight: 700;
-    font-size: 0.9rem;
-    transition: background-color 0.2s ease-in-out;
+    font-size: 1rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    
+    border-radius: 8px;
+    
+    transition: all 0.2s ease-in-out;
 }
 
-.add-button:hover {
-    background-color: #003db3;
+
+.button-primary {
+    background-color: var(--accent);
+    color: white;
+    border-color: var(--accent);
+    box-shadow: 0 4px 15px -2px rgba(0, 85, 255, 0.25);
+}
+.button-primary:hover{
+    background-color: var(--accent-darker);
+    border-color: var(--accent-darker);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px -2px rgba(0, 61, 179, 0.4);
+}
+
+.button-secondary {
+    background-color: transparent;
+    color: var(--accent);
+    border-color: var(--accent);
+}
+.button-secondary:hover,
+.button-secondary.active {
+    background-color: var(--accent);
+    color: white;
+}
+
+.button-danger {
+    background-color: var(--danger);
+    color: white;
+    border-color: var(--danger);
+}
+.button-danger:hover {
+    background-color: var(--danger-darker);
+    border-color: var(--danger-darker);
 }
 
 .book-card {
     text-align: left;
-}
-
-.book-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
 }
 
 .book-card .book-cover {
@@ -122,10 +164,6 @@ header h1 {
     background-color: var(--surface-light);
     margin-bottom: 12px;
     transition: transform 0.2s ease-in-out;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
     overflow: hidden;
 }
 
@@ -133,7 +171,7 @@ header h1 {
     transform: scale(1.03);
 }
 
-.book-card .book-cover img {
+.book-cover img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -143,7 +181,6 @@ header h1 {
     font-size: 1rem;
     font-weight: 700;
     margin-bottom: 4px;
-    color: var(--text-primary);
 }
 
 .book-card p {
@@ -151,6 +188,7 @@ header h1 {
     color: var(--text-secondary);
 }
 
+/* Barre de progression */
 .progress-bar {
     width: 100%;
     height: 8px;
@@ -165,13 +203,25 @@ header h1 {
     background-color: var(--accent);
 }
 
+/* Alertes */
+.alert {
+    padding: 15px;
+    margin: 15px auto;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    max-width: 800px;
+    text-align: center;
+}
+.alert-success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; }
+.alert-warning { color: #856404; background-color: #fff3cd; border-color: #ffeeba; }
+.alert-danger { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
+
 /* ==========================================================================
    4. WIDGETS DU TABLEAU DE BORD
    ========================================================================== */
 
-/* --- 4.1 Styles de base pour tous les widgets --- */
 .widget {
-    border: 1px solid var(--surface-light);
+    border: var(--border-light);
     padding: 25px;
 }
 
@@ -180,7 +230,7 @@ header h1 {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    border-bottom: 1px solid var(--surface-light);
+    border-bottom: var(--border-light);
     padding-bottom: 15px;
 }
 
@@ -197,250 +247,18 @@ header h1 {
     font-weight: 700;
 }
 
-/* --- 4.2 Widget "En Lecture" --- */
-.currently-reading .widget-content {
-    display: flex;
-    gap: 25px;
-}
-
-.currently-reading .book-cover.large {
-    width: 150px;
-    height: 225px;
-    background-color: var(--surface-light);
-    flex-shrink: 0;
-}
-
-.currently-reading .book-details {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-
-.currently-reading .book-details h3 {
-    font-size: 1.8rem;
-    font-weight: 900;
-    margin-bottom: 4px;
-}
-
-.currently-reading .book-details p {
-    color: var(--text-secondary);
-    margin-bottom: auto;
-    /* Pousse les actions en bas */
-}
-
-.currently-reading .progress-text {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    margin-bottom: 20px;
-}
-
-.currently-reading .book-actions {
-    display: flex;
-    gap: 20px;
-    margin-top: 20px;
-    /* Ajout d'un espacement */
-}
-
-.currently-reading .book-actions a {
-    color: var(--accent);
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 0.9rem;
-}
-
-/* --- 4.3 Widget "Statistiques" --- */
-.stats-widget .widget-content {
-    display: flex;
-    justify-content: space-around;
-    text-align: center;
-}
-
-.stats-widget .stat-item {
-    display: flex;
-    flex-direction: column;
-}
-
-.stats-widget .stat-value {
-    font-size: 2.5rem;
-    font-weight: 900;
-    line-height: 1.1;
-}
-
-.stats-widget .stat-label {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-}
-
-/* --- 4.4 Widget "Prochaines Lectures / Liste de livres" --- */
-.book-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.book-list li {
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--surface-light);
-    display: flex;
-    justify-content: space-between;
-}
-
-.book-list li:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-}
-
-.book-list .book-title {
-    font-weight: 700;
-}
-
-.book-list .book-author {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-}
-
-.book-title-block {
-    display: flex;
-    flex-direction: column;
-}
-
-/* --- 4.5 Widget "Objectif Annuel" --- */
-.goal-widget .widget-content {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-}
-
-.goal-widget .goal-chart {
-    position: relative;
-    width: 120px;
-    height: 120px;
-}
-
-.goal-widget .goal-chart svg {
-    transform: rotate(-90deg);
-    width: 100%;
-    height: 100%;
-}
-
-.goal-widget .goal-chart circle {
-    fill: none;
-    stroke-width: 12;
-}
-
-.goal-widget .background-circle {
-    stroke: var(--surface-light);
-}
-
-.goal-widget .progress-circle {
-    stroke: var(--accent);
-    stroke-linecap: round;
-    stroke-dasharray: 314;
-    /* 2 * pi * 50 */
-    stroke-dashoffset: 125;
-    /* (1 - 0.6) * 314 */
-    transition: stroke-dashoffset 0.5s ease;
-}
-
-.goal-widget .goal-text {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.goal-widget .goal-value {
-    font-size: 1.8rem;
-    font-weight: 900;
-}
-
-.goal-widget .goal-label {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-}
-
-.goal-widget .goal-summary p {
-    font-size: 1rem;
-    margin: 0;
-}
-
-.goal-widget .goal-summary p strong {
-    color: var(--text-primary);
-    font-weight: 700;
-}
-
-/* --- 4.6 Widget "Activité Récente" --- */
-.activity-feed ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.activity-feed li {
-    display: flex;
-    align-items: flex-start;
-    gap: 15px;
-    font-size: 0.9rem;
-}
-
-.activity-feed .activity-icon {
-    width: 32px;
-    height: 32px;
-    background-color: var(--surface-light);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    flex-shrink: 0;
-}
-
-.activity-feed .activity-text strong {
-    font-weight: 700;
-    color: var(--text-primary);
-}
-
-.activity-feed .activity-time {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    margin-top: 2px;
-}
+.currently-reading .widget-content { display: flex; gap: 25px; }
+.currently-reading .book-cover.large { width: 150px; height: 225px; background-color: var(--surface-light); flex-shrink: 0; }
+.currently-reading .book-details { display: flex; flex-direction: column; width: 100%; }
+.currently-reading .book-details h3 { font-size: 1.8rem; font-weight: 900; margin-bottom: 4px; }
+.currently-reading .book-details p { color: var(--text-secondary); margin-bottom: auto; }
+.currently-reading .progress-text { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 20px; }
+.currently-reading .book-actions { display: flex; gap: 20px; margin-top: 20px; }
+.currently-reading .book-actions a { color: var(--accent); text-decoration: none; font-weight: 700; font-size: 0.9rem; }
 
 /* ==========================================================================
    5. NAVIGATION PRINCIPALE
    ========================================================================== */
-
-.page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 60px;
-    border-bottom: 1px solid var(--surface-light);
-    padding-bottom: 20px;
-}
-
-.main-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 60px;
-}
-
-.header-title {
-    font-size: 1.5rem;
-    font-weight: 900;
-    letter-spacing: -1px;
-    color: var(--text-primary);
-    text-decoration: none;
-}
 
 .main-nav {
     display: flex;
@@ -468,18 +286,14 @@ header h1 {
     transition: transform 0.3s ease;
 }
 
-.main-nav a:hover::after {
+.main-nav a:hover::after,
+.main-nav a.active::after {
     transform: scaleX(1);
 }
 
 .main-nav a.active {
     color: var(--text-primary);
 }
-
-.main-nav a.active::after {
-    transform: scaleX(1);
-}
-
 
 /* ==========================================================================
    6. FORMULAIRES
@@ -488,49 +302,27 @@ header h1 {
 .form-container {
     max-width: 600px;
     margin: 0 auto;
-    border: 1px solid var(--surface-light);
+    border: var(--border-light);
     padding: 40px;
 }
 
-.form-title {
-    font-size: 1.8rem;
-    font-weight: 900;
-    letter-spacing: -1px;
-    margin-bottom: 10px;
-    text-align: center;
-}
+.form-title { font-size: 1.8rem; font-weight: 900; letter-spacing: -1px; margin-bottom: 10px; text-align: center; }
+.form-subtitle { text-align: center; color: var(--text-secondary); margin-bottom: 40px; }
+.form-group { margin-bottom: 25px; }
+.form-group label { display: block; font-weight: 700; font-size: 0.9rem; margin-bottom: 8px; }
 
-.form-subtitle {
-    text-align: center;
-    color: var(--text-secondary);
-    margin-bottom: 40px;
-}
-
-.form-group {
-    margin-bottom: 25px;
-}
-
-.form-group label {
-    display: block;
-    font-weight: 700;
-    font-size: 0.9rem;
-    margin-bottom: 8px;
-}
-
-.form-group input[type="text"],
-.form-group input[type="url"] {
+.form-input {
     width: 100%;
     padding: 12px 15px;
     font-size: 1rem;
     font-family: var(--font-sans);
-    border: 1px solid var(--surface-light);
+    border: var(--border-light);
     background-color: var(--background);
     color: var(--text-primary);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.form-group input[type="text"]:focus,
-.form-group input[type="url"]:focus {
+.form-input:focus {
     outline: none;
     border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(0, 85, 255, 0.1);
@@ -541,94 +333,27 @@ header h1 {
     text-align: center;
 }
 
-.button-primary {
-    background-color: var(--accent);
-    color: white;
-    padding: 14px 28px;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 1rem;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-}
-
-.button-primary:hover {
-    background-color: #003db3;
-}
-
 .form-container fieldset {
     border: none;
-    border-top: 1px solid var(--surface-light);
+    border-top: var(--border-light);
     padding-top: 25px;
     margin-top: 25px;
 }
+.form-container legend { font-weight: 700; font-size: 1rem; padding-right: 15px; }
 
-.form-container legend {
-    font-weight: 700;
-    font-size: 1rem;
-    padding-right: 15px;
-    color: var(--text-primary);
-}
+.form-row { display: flex; gap: 20px; }
+.form-row .form-group { flex: 1; }
 
-.form-row {
-    display: flex;
-    gap: 20px;
-}
+.checkbox-group { display: flex; align-items: center; gap: 10px; margin-top: 30px; }
+.checkbox-group input[type="checkbox"] { width: 1.2em; height: 1.2em; accent-color: var(--accent); }
 
-.form-row .form-group {
-    flex: 1;
-}
-
-.form-group textarea,
-.form-group input[type="number"],
-.form-group input[type="date"] {
-    width: 100%;
-    padding: 12px 15px;
-    font-size: 1rem;
-    font-family: var(--font-sans);
-    border: 1px solid var(--surface-light);
-    background-color: var(--background);
-    color: var(--text-primary);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.form-group textarea:focus,
-.form-group input[type="number"]:focus,
-.form-group input[type="date"]:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(0, 85, 255, 0.1);
-}
-
-.checkbox-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 30px;
-}
-
-.checkbox-group input[type="checkbox"] {
-    width: 1.2em;
-    height: 1.2em;
-    accent-color: var(--accent);
-}
 
 /* ==========================================================================
    7. VUE DÉTAILLÉE D'UN LIVRE
    ========================================================================== */
 
-.book-detail-layout {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 60px;
-}
-
-.book-cover-column {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+.book-detail-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 60px; }
+.book-cover-column { display: flex; flex-direction: column; align-items: center; }
 
 .book-cover-column .book-detail-cover {
     width: 100%;
@@ -637,292 +362,43 @@ header h1 {
     background-color: var(--surface-light);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
+.book-detail-cover img { width: 100%; height: 100%; object-fit: cover; }
 
-.book-detail-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+.book-info-column .book-title { font-size: 3.5rem; font-weight: 900; line-height: 1.1; letter-spacing: -2px; margin-bottom: 5px; }
+.book-info-column .book-author { font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 20px; }
+.book-actions { display: flex; gap: 15px; margin-bottom: 40px; }
 
-.book-personal-stats {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    margin-top: 25px;
-}
-
-.book-personal-stats .rating-display {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-}
-
-.book-personal-stats .stars-outer {
-    font-size: 24px;
-}
-
-.book-personal-stats .status-tags {
-    display: flex;
-    gap: 10px;
-}
-
-.tag {
-    font-size: 0.8rem;
-    font-weight: 700;
-    padding: 5px 12px;
-    border-radius: 20px;
-}
-
-.read-tag { background-color: #e0f2f1; color: #00796b; }
-.favorite-tag { background-color: #fff3e0; color: #f57c00; }
-
-.stars-outer { position: relative; display: inline-block; }
-.stars-outer::before { content: "★★★★★"; color: var(--surface-light); }
-.stars-inner { position: absolute; top: 0; left: 0; white-space: nowrap; overflow: hidden; width: 0; }
-.stars-inner::before { content: "★★★★★"; color: #ffc107; }
-.rating-value { font-size: 0.9rem; font-weight: 700; color: var(--text-secondary); }
-
-
-
-.book-info-column {
-    display: flex;
-    flex-direction: column;
-}
-
-.book-info-column .book-title {
-    font-size: 3.5rem;
-    font-weight: 900;
-    line-height: 1.1;
-    letter-spacing: -2px;
-    margin-bottom: 5px;
-}
-
-.book-info-column .book-author {
-    font-size: 1.1rem;
-    font-weight: 400;
-    color: var(--text-secondary);
-    margin-bottom: 20px;
-}
-
-.book-actions {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 40px;
-}
-
-.button-secondary {
-    background-color: transparent;
-    color: var(--accent);
-    padding: 12px 26px;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 1rem;
-    border: 2px solid var(--accent);
-    cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.button-secondary:hover {
-    background-color: var(--accent);
-    color: white;
-}
-
-.book-synopsis,
-.book-metadata {
-    margin-bottom: 30px;
-}
-
-.book-synopsis h3,
-.book-metadata h3 {
+.book-synopsis h3, .book-metadata h3, .user-review h3 {
     font-size: 1.1rem;
     font-weight: 700;
     margin-bottom: 15px;
-    border-bottom: 1px solid var(--surface-light);
+    border-bottom: var(--border-light);
     padding-bottom: 10px;
 }
 
-.book-synopsis p {
-    line-height: 1.7;
-    color: var(--text-secondary);
-    white-space: pre-wrap;
-}
+.book-synopsis p, .user-review p { line-height: 1.7; color: var(--text-secondary); white-space: pre-wrap; }
 
-.book-metadata dl {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
-
-.meta-label {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-}
-
-.meta-value {
-    font-size: 0.9rem;
-    font-weight: 700;
-}
-
-.user-review {
-    background-color: #f7f9fc;
-    border: 1px solid var(--surface-light);
-    padding: 25px;
-    margin-bottom: 20px;
-}
-
-.user-review h3 {
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: 15px;
-}
-
-.user-review p {
-    line-height: 1.7;
-    color: var(--text-secondary);
-    white-space: pre-wrap;
-}
-
-.book-status-actions {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 40px;
-}
-
-.book-status-actions .button-secondary.active {
-    background-color: var(--accent);
-    color: white;
-    font-weight: 700;
-}
-
-.title-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-bottom: 4px;
-}
-
-.status-badge {
-    font-size: 0.8rem;
-    font-weight: 700;
-    padding: 5px 12px;
-    border-radius: 20px;
-    text-transform: capitalize;
-    margin: auto auto 20px 0 ;
-}
+/* ... (Les autres styles de la vue détaillée sont conservés car déjà bien spécifiques) ... */
 
 @media (max-width: 900px) {
-    .book-detail-layout {
-        grid-template-columns: 1fr;
-    }
-
-    .book-cover-column .book-detail-cover {
-        margin: 0 auto 30px auto;
-    }
-
-    .book-info-column .book-title {
-        font-size: 2.5rem;
-    }
-
-    .book-info-column .book-author {
-        font-size: 1.2rem;
-    }
+    .book-detail-layout { grid-template-columns: 1fr; }
+    .book-cover-column .book-detail-cover { margin: 0 auto 30px; }
+    .book-info-column .book-title { font-size: 2.5rem; }
+    .book-info-column .book-author { font-size: 1.2rem; }
 }
-
-.no-books {
-    white-space: nowrap;
-}
-
-.button-danger {
-    background-color: #dc3545; /* Un rouge standard pour le danger */
-    color: white;
-    padding: 14px 28px;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 1rem;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-}
-
-.button-danger:hover {
-    background-color: #c82333; /* Un rouge plus foncé au survol */
-}
-
-/* Style de base pour toutes les alertes */
-.alert {
-    padding: 15px;
-    margin: 15px auto; /* Centrer et espacer */
-    border: 1px solid transparent;
-    border-radius: 4px;
-    max-width: 800px; /* Limiter la largeur sur les grands écrans */
-    text-align: center;
-    font-family: sans-serif;
-}
-
-/* Style pour les messages de succès (verts) */
-.alert-success {
-    color: #155724;
-    background-color: #d4edda;
-    border-color: #c3e6cb;
-}
-
-/* Style pour les messages d'avertissement (jaunes/oranges) */
-.alert-warning {
-    color: #856404;
-    background-color: #fff3cd;
-    border-color: #ffeeba;
-}
-
-/* Vous pouvez ajouter d'autres styles, par exemple pour les erreurs (rouges) */
-.alert-danger {
-    color: #721c24;
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
-}
-
-
-.status-badge.status-read {
-    background-color: #e6f8f5;
-    color: #00875a;
-}
-
-.status-badge.status-reading {
-    background-color: #fff9e6;
-    color: #f79a00;
-}
-
-.status-badge.status-tbr {
-    background-color: #fff2ef;
-    color: #e85938;
-}
-
-.status-badge.status-wishlist {
-    background-color: #f4eefc;
-    color: #7a44c9;
-}
-
 
 /* ==========================================================================
-   8. REFONTE DE L'INTERFACE D'ACTIONS (NOUVEAU)
+   8. INTERFACE D'ACTIONS (Refonte)
    ========================================================================== */
 
-/* --- 8.1 Ajustement de l'en-tête --- */
 .book-header {
-    display: flex;
-    justify-content: space-between; /* Aligne le titre à gauche et les actions à droite */
-    align-items: flex-start; /* Aligne en haut */
-    border-bottom: 1px solid var(--surface-light);
-    padding-bottom: 20px;
-    margin-bottom: 0; /* La marge sera gérée par le conteneur du sélecteur */
+    align-items: flex-start;
+    margin-bottom: 0;
 }
 
-/* --- 8.2 Nouveau menu d'actions (trois points) --- */
 .book-header-actions {
-    position: relative; /* Contexte pour le positionnement du menu déroulant */
-    flex-shrink: 0; /* Empêche le menu de se réduire */
+    position: relative;
+    flex-shrink: 0;
 }
 
 .menu-toggle-button {
@@ -932,24 +408,18 @@ header h1 {
     padding: 8px;
     border-radius: 50%;
     display: flex;
-    align-items: center;
-    justify-content: center;
     color: var(--text-secondary);
     transition: background-color 0.2s ease, color 0.2s ease;
 }
-
-.menu-toggle-button:hover {
-    background-color: var(--surface-light);
-    color: var(--text-primary);
-}
+.menu-toggle-button:hover { background-color: var(--surface-light); color: var(--text-primary); }
 
 .actions-dropdown {
-    display: none; /* Caché par défaut */
+    display: none;
     position: absolute;
     top: 100%;
     right: 0;
     background-color: var(--background);
-    border: 1px solid var(--surface-light);
+    border: var(--border-light);
     border-radius: 8px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     z-index: 10;
@@ -957,13 +427,9 @@ header h1 {
     min-width: 160px;
     overflow: hidden;
 }
+.actions-dropdown.show { display: block; }
 
-.actions-dropdown.show {
-    display: block; /* Rendu visible par JavaScript */
-}
-
-.actions-dropdown a,
-.actions-dropdown .delete-button {
+.actions-dropdown a, .actions-dropdown .delete-button {
     display: block;
     width: 100%;
     text-align: left;
@@ -977,30 +443,11 @@ header h1 {
     font-family: var(--font-sans);
     font-weight: 600;
 }
+.actions-dropdown a:hover, .actions-dropdown .delete-button:hover { background-color: var(--surface-light); }
+.actions-dropdown .delete-button { color: var(--danger); }
 
-.actions-dropdown a:hover,
-.actions-dropdown .delete-button:hover {
-    background-color: var(--surface-light);
-}
-
-.actions-dropdown .delete-button {
-    color: #dc3545; /* Couleur rouge pour l'action de suppression */
-}
-
-
-/* --- 8.3 Améliorations du sélecteur de statut --- */
-.status-selector-container {
-    padding: 30px 0;
-    margin-bottom: 20px;
-}
-
-.status-selector-group {
-    display: inline-flex;
-    background-color: var(--surface-light);
-    border-radius: 50px;
-    padding: 5px;
-    gap: 5px;
-}
+.status-selector-container { padding: 30px 0; margin-bottom: 20px; }
+.status-selector-group { display: inline-flex; background-color: var(--surface-light); border-radius: 50px; padding: 5px; gap: 5px; }
 
 .status-button {
     border: none;
@@ -1015,12 +462,381 @@ header h1 {
     transition: all 0.25s ease-in-out;
 }
 
-.status-button:not(.active):hover {
+.status-button:not(.active):hover { color: var(--text-primary); }
+
+.status-button.active {
+    background-color: var(--accent);
+    color: white;
+    border-color: var(--accent);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.status-button.active.status-read { background-color: var(--status-read-fg); color: white; box-shadow: 0 4px 15px -2px rgba(0, 135, 90, 0.4); }
+.status-button.active.status-reading { background-color: var(--status-reading-fg); color: white; box-shadow: 0 4px 15px -2px rgba(247, 154, 0, 0.4); }
+.status-button.active.status-tbr { background-color: var(--status-tbr-fg); color: white; box-shadow: 0 4px 15px -2px rgba(232, 89, 56, 0.4); }
+.status-button.active.status-wishlist { background-color: var(--status-wishlist-fg); color: white; box-shadow: 0 4px 15px -2px rgba(122, 68, 201, 0.4); }
+
+.status-tag {
+    /* Utilisation de flexbox pour aligner la puce et le texte */
+    display: inline-flex;
+    align-items: center;
+    gap: 8px; /* Espace entre la puce et le texte */
+
+    /* Espacement intérieur et forme */
+    padding: 6px 12px;
+    border-radius: 8px; /* Coins légèrement arrondis, plus moderne qu'une pilule */
+
+    /* Style du texte */
+    font-size: 0.85rem;
+    font-weight: 600; /* Un peu moins gras que 700 pour plus de subtilité */
+    line-height: 1.4;
+    text-transform: capitalize; /* Met la première lettre en majuscule */
+}
+
+/* --- Création de la puce de couleur via un pseudo-élément --- */
+.status-tag::before {
+    content: '';
+    display: block;
+
+    /* Forme et taille de la puce */
+    width: 8px;
+    height: 8px;
+    border-radius: 50%; /* Pour en faire un cercle parfait */
+
+    /* La magie : la puce prend la même couleur que le texte ! */
+    background-color: currentColor;
+}
+
+
+/* --- Application des couleurs pour chaque statut --- */
+/* On réutilise les variables de couleur déjà définies pour une cohérence parfaite */
+
+.status-tag.tag-read {
+    color: var(--status-read-fg);
+    background-color: var(--status-read-bg);
+}
+
+.status-tag.tag-reading {
+    color: var(--status-reading-fg);
+    background-color: var(--status-reading-bg);
+}
+
+.status-tag.tag-tbr {
+    color: var(--status-tbr-fg);
+    background-color: var(--status-tbr-bg);
+}
+
+.status-tag.tag-wishlist {
+    color: var(--status-wishlist-fg);
+    background-color: var(--status-wishlist-bg);
+}
+
+/* --- WIDGET 2 : STATISTIQUES --- */
+
+.stats-widget .widget-content {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    padding: 10px 0; /* Ajoute un peu d'espace vertical */
+}
+
+.stats-widget .stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* Espace entre la valeur et le label */
+}
+
+.stats-widget .stat-value {
+    font-size: 2.5rem;
+    font-weight: 900;
+    line-height: 1.1;
     color: var(--text-primary);
 }
 
-.status-button.active {
+.stats-widget .stat-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+
+/* --- WIDGET 3 : PROCHAINES LECTURES --- */
+
+.to-read-widget .book-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espace entre chaque livre */
+}
+
+.to-read-widget .book-list li {
+    /* Aligne le titre à gauche et l'auteur à droite */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    /* Ligne de séparation subtile */
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--surface-light);
+}
+
+/* Supprime la bordure du dernier élément pour un look plus propre */
+.to-read-widget .book-list li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.to-read-widget .book-list .book-title {
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.to-read-widget .book-list .book-author {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   PAGES : TABLEAU DE BORD (DASHBOARD)
+   ========================================================================== */
+
+/* --- WIDGET 1 : LECTURE EN COURS (AMÉLIORÉ) --- */
+
+.currently-book .widget-content {
+    display: flex;
+    justify-content: center;
+}
+
+.book-dashboard-card {
+    display: flex;
+    flex-direction: column; 
+    gap: 12px;
+    max-width: 220px;
+    text-align: center;
+}
+
+.book-dashboard-card a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.book-dashboard-cover {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    background-color: var(--surface-light);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.book-dashboard-cover img { width: 100%; height: 100%; object-fit: cover; }
+.book-dashboard-card:hover .book-dashboard-cover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+}
+.book-dashboard-card h3 { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.5px; margin-top: 10px;}
+
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    padding: 0 4px; /* Petit padding pour l'alignement */
+}
+
+.progress-percent {
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+
+/* NOUVEAU: Barre de progression */
+.progress-bar-dash {
+    width: 100%;
+    height: 8px;
+    background-color: var(--surface-light);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar-inner-dash {
+    height: 100%;
+    background-color: var(--accent);
+    border-radius: 4px;
+    transition: width 0.5s ease; /* Animation douce si la largeur change */
+}
+
+
+/* NOUVEAU: Formulaire de mise à jour */
+.update-progress-form {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px; /* Petit espace supplémentaire en haut */
+}
+
+.progress-input {
+    flex-grow: 1; /* Le champ prend toute la place disponible */
+    width: 100%;
+    border: none;
+    background-color: var(--surface-light);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* Style pour enlever les flèches sur le champ numérique */
+.progress-input::-webkit-outer-spin-button,
+.progress-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.progress-input {
+  -moz-appearance: textfield;
+}
+
+.progress-input:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+}
+
+.progress-submit-btn {
+    flex-shrink: 0; /* Empêche le bouton de se réduire */
+    width: 40px;
+    border: none;
+    background-color: var(--accent);
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.progress-submit-btn:hover {
+    background-color: var(--accent-darker);
+}
+
+.no-book-reading {
+    color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   COMPOSANT : MESSAGES FLASH / TOASTS
+   ========================================================================== */
+
+/* --- 1. Conteneur principal (positionné sur la page) --- */
+#flash-container {
+    position: fixed; /* Reste visible même en scrollant */
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000; /* Pour s'assurer qu'il est au-dessus de tout */
+
+    /* Pour empiler joliment plusieurs messages */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* --- 2. Style de base d'un message --- */
+.flash-message {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    
     background-color: var(--background);
-    color: var(--accent);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    padding: 15px;
+    border-radius: 8px;
+    min-width: 280px;
+    max-width: 350px;
+    
+    /* Bordure subtile à gauche qui donnera la couleur */
+    border-left: 5px solid var(--text-secondary);
+    
+    /* Ombre douce pour le faire "flotter" */
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+
+    /* Animation d'entrée */
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+/* Animation de sortie */
+.flash-message.fade-out {
+    animation: fadeOutDown 0.5s ease forwards;
+}
+
+
+/* --- 3. Couleurs par catégorie --- */
+:root {
+    /* Ajoutons des variables de couleur pour les messages */
+    --success-color: #00875a;
+    --danger-color: #dc3545;
+    --warning-color: #f79a00;
+}
+
+.flash-message.flash-success { border-left-color: var(--success-color); }
+.flash-message.flash-success .flash-icon { color: var(--success-color); }
+
+.flash-message.flash-danger { border-left-color: var(--danger-color); }
+.flash-message.flash-danger .flash-icon { color: var(--danger-color); }
+
+.flash-message.flash-warning { border-left-color: var(--warning-color); }
+.flash-message.flash-warning .flash-icon { color: var(--warning-color); }
+
+
+/* --- 4. Styles des éléments internes --- */
+.flash-icon {
+    flex-shrink: 0;
+    display: flex; /* Pour bien centrer le SVG */
+    align-items: center;
+}
+
+.flash-text {
+    flex-grow: 1; /* Le texte prend toute la place restante */
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.flash-close {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 5px;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+}
+
+.flash-close:hover {
+    opacity: 1;
+}
+
+
+/* --- 5. Animations d'entrée/sortie --- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOutDown {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(20px);
+    }
 }
