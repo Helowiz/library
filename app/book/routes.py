@@ -11,8 +11,23 @@ from app.models.reading import BookStatus, Reading
 # READ
 @bp.route("/")
 def list_books():
-    books = db.session.query(Book).all()
-    return render_template("book/list.html", books=books)
+    status_filter = request.args.get('status') 
+    search_query = request.args.get('q')
+
+    query = db.session.query(Book).outerjoin(Reading)
+
+    if status_filter and status_filter in BookStatus.__members__:
+        query = query.filter(Reading.status == BookStatus[status_filter])
+    
+    if search_query:
+        query = query.filter(Book.title.ilike(f"%{search_query}%"))
+
+    books = query.all()
+    
+    return render_template("book/list.html", 
+                           books=books, 
+                           current_status=status_filter,
+                           BookStatus=BookStatus)
 
 
 @bp.route("/<int:book_id>")
