@@ -19,6 +19,7 @@
         <nav class="main-nav">
             <a href="{{ url_for('main.index') }}">Tableau de Bord</a>
             <a href="{{ url_for('book.list_books') }}">Collection</a>
+            <a href="{{ url_for('series.list_series') }}">Series</a>
         </nav>
 
         <a href="{{ url_for('book.add_book') }}" class="button button-primary">+ Ajouter un livre</a>
@@ -30,7 +31,6 @@
             {% for category, message in messages %}
             <div class="flash-message flash-{{ category }}">
                 <div class="flash-icon">
-                    <!-- On choisit une icône en fonction de la catégorie -->
                     {% if category == 'success' %}
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                         fill="currentColor">
@@ -45,7 +45,7 @@
                             d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z">
                         </path>
                     </svg>
-                    {% else %} <!-- Pour 'warning', 'info', etc. -->
+                    {% else %}
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                         fill="currentColor">
                         <path d="M11 7h2v6h-2zm0 8h2v2h-2z"></path>

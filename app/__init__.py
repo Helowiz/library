@@ -10,7 +10,7 @@ from .models import Book
 def create_app():
     app = Flask(__name__)
     env = os.environ.get("FLASK_ENV", "developpment")
-    
+
     print(f"Current Environment: {env}")
     if env == "production":
         app.config.from_object("app.config.ProductionConfig")
@@ -18,7 +18,6 @@ def create_app():
     else:
         app.config.from_object("app.config.DevelopmentConfig")
         logging.basicConfig(level=logging.DEBUG)
-
 
     # Initialize Flask extensions here
     db.init_app(app)

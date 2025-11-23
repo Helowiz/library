@@ -1,6 +1,7 @@
 import enum
 from app.extensions import db
 
+
 class ReadingStatus(enum.Enum):
     DNF = "Do Not Finish"
     PAUSE = "Pause"
@@ -9,10 +10,11 @@ class ReadingStatus(enum.Enum):
     READING = "Reading"
     READ = "Read"
 
+
 class ReadingSession(db.Model):
     __tablename__ = "reading_session"
     id = db.Column(db.Integer, primary_key=True)
-    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
+    book_id = db.Column(db.Integer, db.ForeignKey("book.id"), nullable=False)
     book = db.relationship("Book", back_populates="readings")
 
     status = db.Column(db.Enum(ReadingStatus), default=ReadingStatus.TBR)
@@ -22,9 +24,9 @@ class ReadingSession(db.Model):
 
     current_page = db.Column(db.Integer, default=0)
 
-    rating = db.Column(db.Integer, nullable=True) 
+    rating = db.Column(db.Integer, nullable=True)
     review = db.Column(db.Text, nullable=True)
-    
+
     is_reread = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
