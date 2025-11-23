@@ -34,7 +34,7 @@
                         </svg>
                     </button>
                     <div class="actions-dropdown" id="actions-menu">
-                        <a href="{{ url_for('book.edit_book', book_id=book.id) }}">Modifier</a>
+                        <a href="{{ url_for('book.update_book', book_id=book.id) }}">Modifier</a>
                         <form method="POST" action="{{ url_for('book.delete_book', book_id=book.id) }}" id="delete-form"
                             style="margin: 0;">
                             {{ delete_form.hidden_tag() }}
@@ -51,28 +51,28 @@
                 <div class="status-selector-group">
                     <form method="POST" action="{{ url_for('book.update_status', book_id=book.id) }}">
                         <button type="submit" name="status" value="TBR"
-                            class="status-button status-tbr {% if not book.reading_status or book.reading_status.status == BookStatus.TBR %}active{% endif %}">
+                            class="status-button status-tbr {% if not latest_session  or latest_session.status == ReadingStatus.TBR %}active{% endif %}">
                             À lire
                         </button>
                     </form>
 
                     <form method="POST" action="{{ url_for('book.update_status', book_id=book.id) }}">
                         <button type="submit" name="status" value="READING"
-                            class="status-button status-reading {% if book.reading_status and book.reading_status.status == BookStatus.READING %}active{% endif %}">
+                            class="status-button status-reading {% if latest_session and latest_session.status == ReadingStatus.READING %}active{% endif %}">
                             En cours
                         </button>
                     </form>
 
                     <form method="POST" action="{{ url_for('book.update_status', book_id=book.id) }}">
                         <button type="submit" name="status" value="READ"
-                            class="status-button status-read {% if book.reading_status and book.reading_status.status == BookStatus.READ %}active{% endif %}">
+                            class="status-button status-read {% if latest_session and latest_session.status == ReadingStatus.READ %}active{% endif %}">
                             Lu
                         </button>
                     </form>
 
                     <form method="POST" action="{{ url_for('book.update_status', book_id=book.id) }}">
                         <button type="submit" name="status" value="WISHLIST"
-                            class="status-button status-wishlist {% if book.reading_status and book.reading_status.status == BookStatus.WISHLIST %}active{% endif %}">
+                            class="status-button status-wishlist {% if latest_session and latest_session.status == ReadingStatus.WISHLIST %}active{% endif %}">
                             Wishlist
                         </button>
                     </form>

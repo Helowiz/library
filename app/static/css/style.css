@@ -581,3 +581,38 @@ header h1, .header-title {
     from { opacity: 1; transform: translateY(0); }
     to { opacity: 0; transform: translateY(20px); }
 }
+
+/* Pour mettre des champs côte à côte */
+.form-row {
+    display: flex;
+    gap: 1rem; /* Espace entre les colonnes */
+}
+
+.half-width {
+    flex: 1; /* Chaque champ prend 50% de la largeur */
+}
+
+/* Pour la section technique */
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 colonnes */
+    gap: 1rem;
+}
+
+.full-width {
+    grid-column: span 2; /* Prend toute la largeur */
+}
+
+.form-section {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+}
+
+/* Style pour les selects multiples */
+select[multiple] {
+    height: auto;
+    padding: 0.5rem;
+}
+
+
