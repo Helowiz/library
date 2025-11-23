@@ -616,3 +616,128 @@ select[multiple] {
 }
 
 
+/* ==========================================================================
+       STYLES SPECIFIQUES POUR LE TRACKER DE SAGAS
+       ========================================================================== */
+    
+    /* 1. La Grille Principale */
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* Cartes un peu plus larges */
+        gap: 30px;
+        align-items: stretch; /* Force les cartes à avoir la même hauteur */
+    }
+
+    /* 2. La Carte de Série */
+    .series-card {
+        background-color: var(--background, #fff);
+        border: 1px solid #e0e0e0;
+        border-radius: 16px; /* Arrondi plus moderne */
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        position: relative;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    .series-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        border-color: var(--accent, #0055FF);
+    }
+
+    /* Lien invisible par dessus */
+    .card-link {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
+        border-radius: 16px;
+    }
+
+    /* 3. En-tête de la carte */
+    .series-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+    .series-info {
+        flex: 1;
+        padding-right: 10px;
+    }
+    .series-info h2 {
+        font-size: 1.4rem;
+        font-weight: 800;
+        margin: 0 0 4px 0;
+        color: #111;
+        line-height: 1.2;
+    }
+    .series-info p {
+        margin: 0;
+        font-size: 0.95rem;
+        color: #666;
+    }
+
+    /* Badges */
+    .badge {
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    .badge-ongoing { background: #FFF9E6; color: #F79A00; }
+    .badge-finished { background: #E6F8F5; color: #00875A; }
+    .badge-abandoned { background: #FFF2EF; color: #E85938; }
+
+    /* 4. La Grille de Carrés (Volume Grid) */
+    .volumes-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px; /* Espace entre les carrés */
+        margin-top: 10px;
+        position: relative;
+        z-index: 2; /* Pour passer au dessus du lien */
+    }
+
+    .vol-square {
+        width: 38px;
+        height: 38px;
+        border-radius: 8px;
+        display: flex;            /* INDISPENSABLE pour centrer le chiffre */
+        align-items: center;      /* Centre verticalement */
+        justify-content: center;  /* Centre horizontalement */
+        font-size: 0.9rem;
+        font-weight: 700;
+        transition: transform 0.2s;
+        cursor: default;
+    }
+    
+    .vol-square:hover { transform: scale(1.15); }
+
+    /* Styles des carrés */
+    .vol-square.owned {
+        background-color: #0055FF; /* Ta couleur accent */
+        color: white;
+        box-shadow: 0 4px 10px rgba(0, 85, 255, 0.2);
+        border: none;
+    }
+
+    .vol-square.missing {
+        background-color: transparent;
+        color: #aaa;
+        border: 2px dashed #ddd; /* Bordure pointillée pour l'effet "vide" */
+    }
+
+    /* 5. Footer (Progression) */
+    .series-footer {
+        margin-top: auto; /* Pousse le footer vers le bas */
+        padding-top: 15px;
+        border-top: 1px solid #eee;
+        font-size: 0.85rem;
+        color: #666;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }

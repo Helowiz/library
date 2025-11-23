@@ -2,9 +2,7 @@ import os
 import logging
 from flask import Flask
 
-from .config import Config
 from .extensions import db, migrate
-from .models import Book
 
 
 def create_app():
@@ -31,6 +29,10 @@ def create_app():
     from .book import bp as book_bp
 
     app.register_blueprint(book_bp, url_prefix="/books")
+
+    from .series import bp as series_bp
+
+    app.register_blueprint(series_bp, url_prefix="/series")
 
     return app
 

@@ -21,6 +21,12 @@ class FormatType(enum.Enum):
     AUDIOBOOK = "Audiobook"
 
 
+class SeriesStatus(enum.Enum):
+    ONGOING = "En cours"
+    FINISHED = "Terminé"
+    ABANDONED = "Abandonné"
+
+
 book_tags = db.Table(
     "book_tags",
     db.Column("book_id", db.Integer, db.ForeignKey("book.id"), primary_key=True),
@@ -39,6 +45,8 @@ class Series(db.Model):
     __tablename__ = "series"
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(150), nullable=False)
+    nb_of_volumes = db.Column(db.Integer, nullable=False)
+    status = db.Column(db.Enum(SeriesStatus), default=SeriesStatus.ONGOING)
     books = db.relationship("Book", back_populates="series")
 
 
