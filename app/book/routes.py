@@ -2,7 +2,8 @@ from flask import flash, redirect, render_template, url_for, request
 
 from app.book import bp
 from app.extensions import db
-from app.models.book import Book, Tag, BookForm, DeleteBookForm
+from app.models.book import Book, Tag
+from app.models.form_book import BookForm, DeleteBookForm
 from app.models.reading import ReadingStatus, ReadingSession
 
 

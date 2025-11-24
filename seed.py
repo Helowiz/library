@@ -1,181 +1,194 @@
-import csv
-import os
-from app import create_app, db
-from app.models.book import Book, Author, Series, FormatType
-from app.models.reading import ReadingSession, ReadingStatus
+import random
+from datetime import datetime, timedelta
+from faker import Faker
+from app import create_app  # Assure-toi que ta factory function est bien importée
+from app.extensions import db
 
-# Initialisation
-app = create_app()
+# Adapte ces imports selon l'endroit où sont tes fichiers models
+from app.models.book import (
+    Author, Series, Tag, Book, Quote,
+    FormatType, SeriesStatus
+)
 
-
-def get_or_create_author(name):
-    """Récupère ou crée un auteur."""
-    if not name:
-        return None
-    clean_name = name.strip()
-    author = Author.query.filter_by(name=clean_name).first()
-    if not author:
-        author = Author(name=clean_name)
-        db.session.add(author)
-        db.session.commit()
-    return author
+from app.models.planning import (
+    MonthlyPAL, MonthlyBookSelection
+)
 
 
-def get_or_create_series(title):
-    """Récupère ou crée une série."""
-    if not title:
-        return None
-    clean_title = title.strip()
-    series = Series.query.filter_by(title=clean_title).first()
-    if not series:
-        series = Series(title=clean_title)
-        db.session.add(series)
-        db.session.commit()
-    return series
+from app.models.reading import (
+    ReadingSession, ReadingStatus
+)
+# Initialisation de Faker en français
+fake = Faker(['fr_FR'])
 
-
-def safe_int(value, default=0):
-    """Convertit en int sans planter."""
-    try:
-        return int(value) if value else default
-    except ValueError:
-        return default
-
-
-def safe_float(value, default=0.0):
-    """Convertit en float sans planter (gère 1.5 et 1,5)."""
-    try:
-        if not value:
-            return default
-        return float(value.replace(",", "."))
-    except ValueError:
-        return default
-
-
-def map_status(status_str):
-    """Mappe le statut CSV vers l'Enum."""
-    status_str = status_str.upper().strip() if status_str else ""
-    mapping = {
-        "READ": ReadingStatus.READ,
-        "READING": ReadingStatus.READING,
-        "DNF": ReadingStatus.DNF,
-        "PAUSE": ReadingStatus.PAUSE,
-        "WISHLIST": ReadingStatus.WISHLIST,
-        "TBR": ReadingStatus.TBR,
-    }
-
-    return mapping.get(status_str, ReadingStatus.TBR)
-
-
-def import_books():
-    csv_file_path = os.path.join(os.path.dirname(__file__), "data", "books.csv")
-
+def seed_database():
+    # Création du contexte d'application Flask
+    app = create_app()
+    
     with app.app_context():
-        print("\n🌱 DÉBUT DU SEEDING AVEC GESTION D'ERREURS...")
+        print("🗑️  Nettoyage de la base de données...")
+        db.drop_all()
+        db.create_all()
 
-        try:
-            with open(csv_file_path, newline="", encoding="utf-8-sig") as csvfile:
-                reader = csv.DictReader(csvfile, delimiter=";")
+        print("🌱 Création des données de test...")
 
-                success_count = 0
-                skip_count = 0
-                error_count = 0
+        # --- 1. Création des Tags (Genres) ---
+        genres = [
+            "Fantasy", "Science-Fiction", "Thriller", "Romance", "Horreur", 
+            "Policier", "Historique", "Développement personnel", "Biographie", "Manga"
+        ]
+        tags_objects = []
+        for genre in genres:
+            tag = Tag(name=genre)
+            tags_objects.append(tag)
+            db.session.add(tag)
+        
+        db.session.commit()
+        print(f"✅ {len(genres)} genres ajoutés.")
 
-                for row_index, row in enumerate(
-                    reader, start=2
-                ):  # start=2 car ligne 1 = headers
-                    try:
-                        # --- 1. Nettoyage et Récupération des Données ---
-                        title = row.get("title", "").strip()
-                        author_name = row.get("author", "").strip()
+        # --- 2. Création des Auteurs ---
+        authors_objects = []
+        for _ in range(20):
+            author = Author(name=fake.name())
+            authors_objects.append(author)
+            db.session.add(author)
+        
+        db.session.commit()
+        print(f"✅ {len(authors_objects)} auteurs ajoutés.")
 
-                        if not title or not author_name:
-                            print(
-                                f"   ⚠️  Ligne {row_index}: Titre ou Auteur manquant. Ignorée."
-                            )
-                            error_count += 1
-                            continue
+        # --- 3. Création des Séries ---
+        series_objects = []
+        for _ in range(10):
+            series = Series(
+                title=fake.sentence(nb_words=3).replace(".", ""),
+                nb_of_volumes=random.randint(3, 12),
+                status=random.choice(list(SeriesStatus))
+            )
+            series_objects.append(series)
+            db.session.add(series)
+        
+        db.session.commit()
+        print(f"✅ {len(series_objects)} séries ajoutées.")
 
-                        # --- 2. Gestion Auteur ---
-                        author_obj = get_or_create_author(author_name)
+        # --- 4. Création des Livres ---
+        books_objects = []
+        
+        # Formats possibles
+        formats = list(FormatType)
 
-                        # --- 3. Vérification Doublon ---
-                        existing = Book.query.filter_by(
-                            title=title, author_id=author_obj.id
-                        ).first()
-                        if existing:
-                            print(f"   ⏭️  Ligne {row_index}: '{title}' existe déjà.")
-                            skip_count += 1
-                            continue
+        for _ in range(50): # Créons 50 livres
+            # Choix aléatoire d'un auteur
+            author = random.choice(authors_objects)
+            
+            # 50% de chance d'être dans une série
+            is_in_series = random.choice([True, False])
+            selected_series = None
+            volume_num = None
+            
+            if is_in_series:
+                selected_series = random.choice(series_objects)
+                volume_num = random.randint(1, selected_series.nb_of_volumes)
 
-                        # --- 4. Gestion Série (Saga) ---
-                        series_title = row.get(
-                            "series", ""
-                        ).strip()  # ex: "Harry Potter"
-                        series_obj = get_or_create_series(series_title)
-
-                        series_vol = safe_float(row.get("volume"))  # ex: 1.5
-
-                        # --- 5. Création du Livre ---
-                        new_book = Book(
-                            title=title,
-                            synopsis=row.get("synopsis", "Pas de résumé"),
-                            cover_url=row.get("cover_url", ""),
-                            number_of_pages=safe_int(row.get("pages")),
-                            # Relations
-                            author=author_obj,
-                            series=series_obj,
-                            series_volume=series_vol,
-                            # Défauts
-                            language="FR",
-                            format=FormatType.PAPIER,
-                        )
-
-                        # --- 6. Gestion Lecture ---
-                        reading_status = map_status(row.get("status"))
-                        current_page = safe_int(row.get("current_page"))
-
-                        # Logique intelligente pour la page
-                        if reading_status == ReadingStatus.READ:
-                            current_page = new_book.number_of_pages or 0
-
-                        session = ReadingSession(
-                            book=new_book,
-                            status=reading_status,
-                            current_page=current_page,
-                        )
-                        new_book.readings.append(session)
-
-                        # --- 7. Sauvegarde ---
-                        db.session.add(new_book)
-                        success_count += 1
-
-                        # Feedback visuel console
-                        series_info = (
-                            f" [Série: {series_obj.title} #{series_vol}]"
-                            if series_obj
-                            else ""
-                        )
-                        print(f"   ✅ Ajouté : {title}{series_info}")
-
-                    except Exception as e_row:
-                        # Si une ligne plante, on l'affiche mais on ne stoppe pas le script
-                        print(
-                            f"   ❌ ERREUR CRITIQUE Ligne {row_index} ({title}): {e_row}"
-                        )
-                        db.session.rollback()  # On annule juste cette transaction
-                        error_count += 1
-
-            # Commit final
-            db.session.commit()
-            print("-" * 40)
-            print(
-                f"Rapport : ✅ {success_count} ajoutés | ⏭️ {skip_count} passés | ❌ {error_count} erreurs"
+            # Création du livre
+            book = Book(
+                title=fake.sentence(nb_words=4).replace(".", ""),
+                synopsis=fake.paragraph(nb_sentences=5),
+                isbn=fake.isbn13().replace("-", ""),
+                cover_url=f"https://picsum.photos/seed/{random.randint(1,1000)}/200/300", # Image aléatoire
+                publisher=fake.company(),
+                language="FR",
+                number_of_pages=random.randint(150, 900),
+                format=random.choice(formats),
+                author_id=author.id,
+                series_id=selected_series.id if selected_series else None,
+                series_volume=volume_num,
+                added_at=fake.date_time_between(start_date='-2y', end_date='now')
             )
 
-        except FileNotFoundError:
-            print(f"❌ Erreur Fatale : Fichier introuvable à {csv_file_path}")
+            # Ajout de 1 à 3 tags aléatoires
+            book.tags.extend(random.sample(tags_objects, k=random.randint(1, 3)))
 
+            books_objects.append(book)
+            db.session.add(book)
+
+        db.session.commit()
+        print(f"✅ {len(books_objects)} livres ajoutés.")
+
+        # --- 5. Création des Citations (Quotes) ---
+        for book in random.sample(books_objects, 15): # Ajoute des citations à 15 livres
+            quote = Quote(
+                content=fake.sentence(nb_words=15),
+                page_number=random.randint(10, book.number_of_pages or 100),
+                book_id=book.id
+            )
+            db.session.add(quote)
+        
+        print("✅ Citations ajoutées.")
+
+        # --- 6. Création des Sessions de Lecture ---
+        # Pour chaque livre, on décide s'il a été lu ou non
+        reading_statuses = list(ReadingStatus)
+        
+        for book in books_objects:
+            # 70% de chance d'avoir une entrée dans le journal de lecture
+            if random.random() > 0.3:
+                status = random.choice(reading_statuses)
+                
+                start_date = fake.date_between(start_date='-1y', end_date='today')
+                finish_date = None
+                rating = None
+                review = None
+                current_page = 0
+
+                if status == ReadingStatus.READ:
+                    finish_date = start_date + timedelta(days=random.randint(2, 30))
+                    rating = random.randint(1, 5)
+                    review = fake.paragraph(nb_sentences=3)
+                    current_page = book.number_of_pages
+                elif status == ReadingStatus.READING:
+                    current_page = random.randint(1, book.number_of_pages or 100)
+                
+                session = ReadingSession(
+                    book_id=book.id,
+                    status=status,
+                    start_date=start_date,
+                    finish_date=finish_date,
+                    current_page=current_page,
+                    rating=rating,
+                    review=review,
+                    is_reread=random.choice([True, False])
+                )
+                db.session.add(session)
+
+        print("✅ Sessions de lecture ajoutées.")
+
+        # --- 7. Création d'une PAL Mensuelle (Monthly PAL) ---
+        current_month = datetime.now().month
+        current_year = datetime.now().year
+        
+        pal = MonthlyPAL(
+            month=current_month,
+            year=current_year,
+            theme="Lectures d'Automne" if current_month in [9, 10, 11] else "Lectures du moment"
+        )
+        db.session.add(pal)
+        db.session.commit() # Commit pour avoir l'ID de la PAL
+
+        # Sélectionner 3 livres au hasard pour la PAL
+        pal_books = random.sample(books_objects, 3)
+        for index, book in enumerate(pal_books):
+            selection = MonthlyBookSelection(
+                monthly_pal_id=pal.id,
+                book_id=book.id,
+                priority=index + 1,
+                note=fake.sentence(nb_words=5)
+            )
+            db.session.add(selection)
+
+        db.session.commit()
+        print(f"✅ PAL mensuelle créée pour {current_month}/{current_year}.")
+
+        print("🚀 Base de données remplie avec succès !")
 
 if __name__ == "__main__":
-    import_books()
+    seed_database()

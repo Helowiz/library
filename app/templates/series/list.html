@@ -30,80 +30,36 @@
     <div class="dashboard-grid">
         {% for series in series_list %}
             {% if series.books %}
-            
-            {# --- SIMULATION DONNÉES --- #}
-            {% set owned_volumes = [] %}
-            {% for b in series.books %}
-                {% if b.series_volume %}{% set _ = owned_volumes.append(b.series_volume|int) %}{% endif %}
-            {% endfor %}
-            {% set max_owned = owned_volumes|max if owned_volumes else 0 %}
-            
-            {# Calcul factice du total #}
-            {% set fake_add = (series.id * 7) % 5 %} 
-            {% set total_theoretical = max_owned + fake_add %}
-            
-            {# Statut factice #}
-            {% set fake_status = 'ongoing' %}
-            {% if (series.id % 4) == 0 %}{% set fake_status = 'finished' %}
-            {% elif (series.id % 5) == 0 %}{% set fake_status = 'abandoned' %}{% endif %}
-            {% if fake_status == 'finished' %}{% set total_theoretical = max_owned %}{% endif %}
+                <div class="series-card saga-item" data-status="{{ fake_status }}">
+                <a href="{{ url_for('series.detail_series', series_id=series.id) }}" class="card-link"></a>
 
-            <!-- CARTE -->
-            <div class="series-card saga-item" data-status="{{ fake_status }}">
-                
-                <!-- Lien global -->
-                <a href="{{ url_for('bp.book_detail', id=series.books[0].id) }}" class="card-link"></a>
-
-                <!-- En-tête -->
                 <div class="series-header">
                     <div class="series-info">
                         <h2>{{ series.title }}</h2>
                         <p>Par {{ series.books[0].author.name }}</p>
                     </div>
-                    
-                    <!-- Badge -->
-                    {% if fake_status == 'ongoing' %}
+                    {% if series.status == SeriesStatus.ONGOING %}
                         <span class="badge badge-ongoing">En cours</span>
-                    {% elif fake_status == 'finished' %}
+                    {% elif series.status == SeriesStatus.FINISHED %}
                         <span class="badge badge-finished">Terminée</span>
                     {% else %}
                         <span class="badge badge-abandoned">Abandonnée</span>
                     {% endif %}
                 </div>
 
-                <!-- Grille des carrés -->
                 <div class="volumes-container">
-                    {% for i in range(1, total_theoretical + 1) %}
-                        {% if i in owned_volumes %}
-                            <!-- Vert (Possédé) -->
+                    {% for i in range(1, series.nb_of_volumes + 1) %}
+                        {% if i in owned_volumes[series.id] %}
                             <div class="vol-square owned" style="z-index: 2;" title="Tome {{ i }}">
                                 {{ i }}
                             </div>
                         {% else %}
-                            <!-- Gris (Manquant) -->
                             <div class="vol-square missing" style="z-index: 2;" title="Tome {{ i }} manquant">
                                 {{ i }}
                             </div>
                         {% endif %}
                     {% endfor %}
                 </div>
-
-                <!-- Footer progression -->
-                <div class="series-footer">
-                    <span>
-                        <strong>{{ series.books|length }}</strong> / {{ total_theoretical }}
-                    </span>
-                    {% if series.books|length < total_theoretical %}
-                        <span style="color: var(--danger-color, #dc3545); font-weight: 600;">
-                            - {{ total_theoretical - series.books|length }}
-                        </span>
-                    {% else %}
-                        <span style="color: var(--success-color, #00875a); font-weight: 600;">
-                            Complète
-                        </span>
-                    {% endif %}
-                </div>
-
             </div>
             {% endif %}
         {% endfor %}
