@@ -6,20 +6,20 @@
     <div class="library-header">
         <div class="toolbar-container">
             <nav class="nav-pills">
-                <a href="#"
+                <a href="{{ url_for('series.list_series') }}"
                     class="nav-pill {% if not current_status %}active{% endif %}">
                     Tout
                 </a>
-                <a href="#"
-                    class="nav-pill {% if current_status == 'READING' %}active{% endif %}">
+                <a href="{{ url_for('series.list_series', statuts='ONGOING') }}"
+                    class="nav-pill {% if current_status == 'ONGOING' %}active{% endif %}">
                     En cours
                 </a>
-                <a href="#"
-                    class="nav-pill {% if current_status == 'TBR' %}active{% endif %}">
+                <a href="{{ url_for('series.list_series', statuts='ABANDONED') }}"
+                    class="nav-pill {% if current_status == 'ABANDONED' %}active{% endif %}">
                     Abandonnée
                 </a>
-                <a href="#"
-                    class="nav-pill {% if current_status == 'READ' %}active{% endif %}">
+                <a href="{{ url_for('series.list_series', statuts='FINISHED') }}"
+                    class="nav-pill {% if current_status == 'FINISHED' %}active{% endif %}">
                     Terminée
                 </a>
             </nav>

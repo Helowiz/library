@@ -3,107 +3,154 @@
 {% block title %}{{ book.title }}{% endblock %}
 
 {% block content %}
-<main>
-    <article class="book-detail-layout">
-        <aside class="book-cover-column">
-            <div class="book-detail-cover">
-                {% if book.cover_url %}
-                <img src="{{ book.cover_url }}" alt="Couverture de {{ book.title }}">
-                {% else %}
-                <div class="no-cover-placeholder">Pas de couverture</div>
-                {% endif %}
+
+<div class="book-detail-container">
+    <aside class="book-sidebar">
+        <div class="detail-cover">
+            {% if book.cover_url %}
+            <img src="{{ book.cover_url }}" alt="Couverture">
+            {% else %}
+            <div
+                style="height: 300px; background: #eee; display: flex; align-items: center; justify-content: center; color: #aaa;">
+                No Image
             </div>
-        </aside>
+            {% endif %}
+        </div>
 
-        <section class="book-info-column">
-            <header class="book-header">
-                <div class="book-title-block">
-                    <div class="title-wrapper">
-                        <h1 class="book-title">{{ book.title }}</h1>
-                    </div>
-                    <h2 class="book-author">par {{ book.author }}</h2>
+        <div class="sidebar-section">
+            <div class="sidebar-title">Fiche Technique</div>
+            <div class="meta-item">
+                <span class="meta-label">Format</span><span class="meta-value">{{ book.format.value }}</span>
+            </div>
+            {% if book.number_of_pages %}
+                <div class="meta-item">
+                    <span class="meta-label">Pages</span>
+                    <span class="meta-value">{{ book.number_of_pages }}</span>
                 </div>
-                <div class="book-header-actions">
-                    <button class="menu-toggle-button" id="menu-toggle" aria-label="Ouvrir le menu d'actions">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="1"></circle>
-                            <circle cx="12" cy="5" r="1"></circle>
-                            <circle cx="12" cy="19" r="1"></circle>
-                        </svg>
-                    </button>
-                    <div class="actions-dropdown" id="actions-menu">
-                        <a href="{{ url_for('book.update_book', book_id=book.id) }}">Modifier</a>
-                        <form method="POST" action="{{ url_for('book.delete_book', book_id=book.id) }}" id="delete-form"
-                            style="margin: 0;">
-                            {{ delete_form.hidden_tag() }}
-                            <button type="button" class="delete-button"
-                                onclick="if(confirm('Êtes-vous sûr(e) de vouloir supprimer ce livre ?')) document.getElementById('delete-form').submit();">
-                                Supprimer
-                            </button>
-                        </form>
-                    </div>
+            {% endif %}
+            {% if book.publisher %}
+                <div class="meta-item">
+                    <span class="meta-label">Éditeur</span>
+                    <span class="meta-value">{{ book.publisher }}</span>
                 </div>
-            </header>
+            {% endif %}
+            <div class="meta-item">
+                <span class="meta-label">Langue</span>
+                <span class="meta-value">{{ book.language }}</span>
+            </div>
+        </div>
 
-            <div class="status-selector-container">
+        {% if book.tags %}
+            <div class="sidebar-section">
+                <div class="sidebar-title">Genres</div>
+                <div class="sidebar-tags">
+                    {% for tag in book.tags %}
+                        <span class="sidebar-tag">#{{ tag.name }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </aside>
+
+    <main class="book-main-content">
+        <header class="book-header">
+            {% if book.series %}
+                <div class="series-overline">
+                    <span class="series-title">{{ book.series.title }}</span>
+                    <span class="series-separator">//</span>
+                    <span class="series-vol">VOL. {{ book.series_volume }}</span>
+                </div>
+            {% endif %}
+            <div class="title-group">
+                <h1>{{ book.title }}</h1>
+                <div class="author-name">par <strong>{{ book.author.name }}</strong></div>
+            </div>
+        </header>
+
+        <section class="actions-bar">
+            {% set current_status = book.readings[0].status.name if book.readings else 'None' %}
+            <form method="POST" action="{{ url_for('book.update_status', book_id=book.id) }}">
                 <div class="status-selector-group">
-                    <form method="POST" action="{{ url_for('book.update_status', book_id=book.id) }}">
-                        <button type="submit" name="status" value="TBR"
-                            class="status-button status-tbr {% if not latest_session  or latest_session.status == ReadingStatus.TBR %}active{% endif %}">
-                            À lire
-                        </button>
-                    </form>
-
-                    <form method="POST" action="{{ url_for('book.update_status', book_id=book.id) }}">
-                        <button type="submit" name="status" value="READING"
-                            class="status-button status-reading {% if latest_session and latest_session.status == ReadingStatus.READING %}active{% endif %}">
-                            En cours
-                        </button>
-                    </form>
-
-                    <form method="POST" action="{{ url_for('book.update_status', book_id=book.id) }}">
-                        <button type="submit" name="status" value="READ"
-                            class="status-button status-read {% if latest_session and latest_session.status == ReadingStatus.READ %}active{% endif %}">
-                            Lu
-                        </button>
-                    </form>
-
-                    <form method="POST" action="{{ url_for('book.update_status', book_id=book.id) }}">
-                        <button type="submit" name="status" value="WISHLIST"
-                            class="status-button status-wishlist {% if latest_session and latest_session.status == ReadingStatus.WISHLIST %}active{% endif %}">
-                            Wishlist
-                        </button>
-                    </form>
-
+                    <button type="submit" name="status" value="WISHLIST"
+                        class="status-button status-wishlist {% if current_status == 'WISHLIST' %}active{% endif %}">
+                        Wishlist
+                    </button>
+                    <button type="submit" name="status" value="TBR"
+                        class="status-button status-tbr {% if current_status == 'TBR' %}active{% endif %}">
+                        PAL
+                    </button>
+                    <button type="submit" name="status" value="READING"
+                        class="status-button status-reading {% if current_status == 'READING' %}active{% endif %}">
+                        En cours
+                    </button>
+                    <button type="submit" name="status" value="READ"
+                        class="status-button status-read {% if current_status == 'READ' %}active{% endif %}">
+                        Lu
+                    </button>
+                    <button type="submit" name="status" value="DNF"
+                        class="status-button {% if current_status == 'DNF' %}active{% endif %}"
+                        style="{% if current_status == 'DNF' %}background-color: var(--danger); color: white;{% endif %}">
+                        Abandonné
+                    </button>
                 </div>
-            </div>
-
-            <div class="book-synopsis">
-                <h3>Résumé</h3>
-                <p>{{ book.synopsis }}</p>
-            </div>
-
+            </form>
         </section>
-    </article>
-</main>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const menuToggle = document.getElementById('menu-toggle');
-        const actionsMenu = document.getElementById('actions-menu');
 
-        if (menuToggle && actionsMenu) {
-            menuToggle.addEventListener('click', function (event) {
-                event.stopPropagation();
-                actionsMenu.classList.toggle('show');
-            });
+        <section>
+            <h2 class="section-title">Synopsis</h2>
+            <div class="synopsis-text">{{ book.synopsis or "Aucun résumé disponible." }}</div>
+        </section>
 
-            document.addEventListener('click', function (event) {
-                if (!actionsMenu.contains(event.target) && !menuToggle.contains(event.target)) {
-                    actionsMenu.classList.remove('show');
-                }
-            });
-        }
-    });
-</script>
+        {% if book.quotes %}
+        <section>
+            <h2 class="section-title">Citations</h2>
+            <div style="display: grid; gap: 1rem;">
+                {% for quote in book.quotes %}
+                <div
+                    style="background: #fff; border: 1px solid #eee; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
+                    <div style="font-family: serif; font-size: 1.1rem; color: #555; line-height: 1.6;">« {{
+                        quote.content }} »</div>
+                    {% if quote.page_number %}
+                    <div style="text-align: right; font-size: 0.8rem; color: #999; margin-top: 10px;">Page {{
+                        quote.page_number }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        <section>
+            <h2 class="section-title">Journal de lecture</h2>
+            {% if book.readings %}
+            <div class="timeline">
+                {% for session in book.readings %}
+                <div class="timeline-item">
+                    <div class="timeline-dot dot-{{ session.status.name }}"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <span class="timeline-status">{{ session.status.value }}</span>
+                            {% if session.rating %}<span style="color: #f1c40f; font-size: 0.9rem;">{{ "★" *
+                                session.rating }}</span>{% endif %}
+                            {% if session.is_reread %}<span class="reread-badge">Relecture</span>{% endif %}
+                        </div>
+                        <div class="timeline-date">
+                            {% if session.finish_date %}Fini le {{ session.finish_date.strftime('%d/%m/%Y') }}
+                            {% elif session.start_date %}Commencé le {{ session.start_date.strftime('%d/%m/%Y') }}
+                            {% else %}Date inconnue{% endif %}
+                        </div>
+                        {% if session.review %}
+                        <div class="timeline-review">{{ session.review }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="color: #999; font-style: italic;">Aucune activité enregistrée.</p>
+            {% endif %}
+        </section>
+
+    </main>
+</div>
 {% endblock %}
