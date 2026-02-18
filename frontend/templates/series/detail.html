@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+
+{% block title %}Série : {{ series.title }}{% endblock %}
+
+{% block content %}
+
+<div class="series-container">
+    <aside class="series-sidebar">
+        <div class="stat-card">
+            <div class="stat-number" style="color: var(--success-color);">
+                {{ completion_percent|default(0)|int }}%
+            </div>
+            <div class="stat-label">Progression</div>
+            <div class="stat-sub">{{ read_count }} / {{ total_vols }} lus</div>
+
+            <div class="progress-bar" style="margin-top: 15px;">
+                <div class="progress-bar-inner" style="width: {{ completion_percent|default(0) }}%;"></div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-number">{{ total_vols }}</div>
+            <div class="stat-label">Total Tomes</div>
+            <div style="margin-top: 10px;">
+                <span class="series-badge badge-{{ series.status.name }}">
+                    {{ series.status.value }}
+                </span>
+            </div>
+        </div>
+    </aside>
+    <main>
+        <header class="series-header">
+            <div class="series-info">
+                <div class="series-overline">SAGA</div>
+                <h1>{{ series.title }}</h1>
+                {% if sorted_books %}
+                <p class="author-name">
+                    Par <strong>{{ sorted_books[0].author.name }}</strong>
+                </p>
+                {% endif %}
+            </div>
+        </header>
+
+        <section>
+
+            <div class="tomes-grid">
+                {% for book in sorted_books %}
+                <div class="tome-card">
+                    <a href="{{ url_for('book.view_a_book', book_id=book.id) }}" class="tome-link-wrapper">
+
+                        <div class="tome-cover">
+
+                            {% if book.cover_url %}
+                            <img src="{{ book.cover_url }}" loading="lazy" alt="{{ book.title }}">
+                            {% else %}
+                            <div class="no-cover"><span>{{ book.series_volume }}</span></div>
+                            {% endif %}
+
+                            <div class="cover-badge status-{{ book.current_status.name|lower }}">
+                                {{ book.current_status.value }}
+                            </div>
+                        </div>
+
+                        <div class="tome-info">
+                            <div class="tome-meta">
+                                Tome {{ book.series_volume }}
+                            </div>
+                            <h3 class="tome-title" title="{{ book.title }}">
+                                {{ book.title }}
+                            </h3>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+</div>
+{% endblock %}
