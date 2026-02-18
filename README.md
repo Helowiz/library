@@ -8,9 +8,8 @@
 ## Technologies
 - **IDE** : VSCode
 - **Back-end** : Flask
-- **Front-end** : TypeScript 
 
-*Library* est une application conteneuriser avec **Docker** et elle utilise l'API **Open Library**
+*Library* est une application conteneuriser avec **Docker** 
 
 ## How to use ?
 

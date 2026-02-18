@@ -1,0 +1,91 @@
+<form method="POST" novalidate>
+    {{ form.hidden_tag() }}
+
+    <!-- SECTION 1 : IDENTITÉ -->
+    <div class="form-section">
+        <div class="form-group">
+            {{ form.title.label }}
+            {{ form.title(class="form-input", placeholder="Ex: Harry Potter à l'école des sorciers") }}
+            {% for error in form.title.errors %}
+            <span class="error-msg">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.author_id.label }}
+            {{ form.author_id(class="form-input form-select") }}
+            <small class="form-help">L'auteur n'est pas dans la liste ? <a href="#">Créer un auteur</a></small>
+        </div>
+    </div>
+
+    <!-- SECTION 2 : SAGA -->
+    <div class="form-section">
+        <div class="form-row">
+            <div class="form-group half-width">
+                {{ form.series_id.label }}
+                {{ form.series_id(class="form-input form-select") }}
+            </div>
+            <div class="form-group half-width">
+                {{ form.series_volume.label }}
+                {{ form.series_volume(class="form-input", placeholder="Ex: 1.5") }}
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 3 : TECHNIQUE -->
+    <div class="form-section">
+        <div class="grid-container">
+            <div class="form-group">
+                {{ form.format.label }}
+                {{ form.format(class="form-input form-select") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.language.label }}
+                {{ form.language(class="form-input form-select") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.number_of_pages.label }}
+                {{ form.number_of_pages(class="form-input") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.isbn.label }}
+                {{ form.isbn(class="form-input", placeholder="978-...") }}
+            </div>
+
+            <div class="form-group full-width">
+                {{ form.publisher.label }}
+                {{ form.publisher(class="form-input") }}
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 4 : VISUEL -->
+    <div class="form-section">
+            <div class="form-group">
+                {{ form.tags.label }}
+
+            {{ form.tags(class="form-input", id="tags-select") }}
+
+            <small class="form-help">Sélectionnez un ou plusieurs genres.</small>
+        </div>
+
+        <div class="form-group">
+            {{ form.cover_url.label }}
+            {{ form.cover_url(class="form-input", placeholder="http://exemple.com/image.jpg") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.synopsis.label }}
+            {{ form.synopsis(rows="6", class="form-input") }}
+        </div>
+    </div>
+    <div class="form-actions">
+        {{ form.submit(class="button button-primary") }}
+    </div>
+
+</form>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/choices.js/10.2.0/choices.min.js"></script>

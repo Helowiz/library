@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block title %}Ma Collection{% endblock %}
+
+{% block content %}
+<main>
+    <div class="library-header">
+        <div class="toolbar-container">
+            <nav class="nav-pills">
+                <a href="{{ url_for('book.list_books', q=current_search) }}"
+                    class="nav-pill {% if not current_status %}active{% endif %}">
+                    Tout
+                </a>
+
+                <a href="{{ url_for('book.list_books', status='READING', q=current_search) }}"
+                    class="nav-pill {% if current_status == 'READING' %}active{% endif %}">
+                    En cours
+                </a>
+
+                <a href="{{ url_for('book.list_books', status='TBR', q=current_search) }}"
+                    class="nav-pill {% if current_status == 'TBR' %}active{% endif %}">
+                    PAL
+                </a>
+
+                <a href="{{ url_for('book.list_books', status='READ', q=current_search) }}"
+                    class="nav-pill {% if current_status == 'READ' %}active{% endif %}">
+                    Lus
+                </a>
+
+                <a href="{{ url_for('book.list_books', status='WISHLIST', q=current_search) }}"
+                    class="nav-pill {% if current_status == 'WISHLIST' %}active{% endif %}">
+                    Wishlist
+                </a>
+            </nav>
+
+            <div class="toolbar-actions">
+                <span class="toolbar-count">
+                    <strong>{{ books|length }}</strong> livre{% if books|length > 1 %}s{% endif %}
+                </span>
+
+                <div class="toolbar-divider"></div>
+
+                <form method="GET" action="{{ url_for('book.list_books') }}" class="toolbar-search">
+                    {% if current_status %}
+                    <input type="hidden" name="status" value="{{ current_status }}">
+                    {% endif %}
+
+                    <button type="submit" class="search-icon-btn" aria-label="Rechercher">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </button>
+                    <input type="text" name="q" placeholder="Rechercher..." value="{{ current_search or '' }}">
+                </form>
+            </div>
+        </div>
+        <div class="book-grid">
+            {% for book in books %}
+            <div class="book-card">
+                <a href="{{ url_for('book.view_a_book', book_id=book.id) }}">
+                    <div class="book-cover">
+                        {% if book.cover_url %}
+                        <img src="{{ book.cover_url }}" alt="Couverture">
+                        {% else %}
+                        <div class="no-cover">Pas d'image</div>
+                        {% endif %}
+                    </div>
+                </a>
+                <h3>{{ book.title }}</h3>
+                <p>{{ book.author.name }}</p>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <h3>Aucun livre trouvé</h3>
+            </div>
+            {% endfor %}
+        </div>
+</main>
+{% endblock %}
