@@ -170,3 +170,7 @@ cython_debug/
 pData/
 
 library.wiki/
+
+*.vite
+*.vscode
+node_modules
